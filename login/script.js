@@ -352,3 +352,21 @@ const handleFormSubmit = (formId, btnId) => {
 
 handleFormSubmit('login-form', 'login-btn');
 handleFormSubmit('signup-form', 'signup-btn');
+
+// Core Members — Navigate to Culprits Page
+const meetCulpritsBtn = document.getElementById('meet-culprits-btn');
+
+if (meetCulpritsBtn) {
+    meetCulpritsBtn.addEventListener('click', () => {
+        // Smooth exit animation before navigating
+        gsap.to('body', {
+            opacity: 0,
+            scale: 0.95,
+            duration: 0.6,
+            ease: "power2.inOut",
+            onComplete: () => {
+                window.location.href = '../culprits/culprits.html';
+            }
+        });
+    });
+}
