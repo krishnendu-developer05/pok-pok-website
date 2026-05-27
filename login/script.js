@@ -7,7 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 document.addEventListener('DOMContentLoaded', () => {
     // Fade in container
     gsap.to('.hero-container', { opacity: 1, duration: 1.2, ease: "power2.inOut" });
-    
+
     // Animate Background Blobs randomly for an organic, colorful feel
     const blobs = document.querySelectorAll('.blob');
     blobs.forEach(blob => {
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ease: "sine.inOut"
         });
     });
-    
+
     // Elastic entrance for main title
     gsap.from('.title', {
         y: -60,
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         delay: 0.5,
         ease: "power2.out"
     });
-    
+
     // Slide up login card
     gsap.from('.login-card', {
         y: 80,
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ease: "back.out(1.2)",
         delay: 0.4
     });
-    
+
     // Parallax interactive floating shapes
     gsap.from('.interactive-shape', {
         opacity: 0,
@@ -71,11 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Scroll Animations for Members and Events Sections
-    gsap.utils.toArray('.gs-reveal-event').forEach(function(elem) {
+    gsap.utils.toArray('.gs-reveal-event').forEach(function (elem) {
         gsap.from(elem, {
             scrollTrigger: {
                 trigger: elem,
-                start: "top 85%", 
+                start: "top 85%",
                 toggleActions: "play none none reverse"
             },
             y: 80,
@@ -89,26 +89,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Fun tap/click interaction for the title
 const titleEl = document.getElementById('main-title');
-if(titleEl) {
+if (titleEl) {
     titleEl.addEventListener('click', () => {
         // High-end UI Squish and stretch wobble
-        gsap.fromTo(titleEl, 
+        gsap.fromTo(titleEl,
             { scaleX: 1, scaleY: 1, rotation: 0 },
-            { 
-                scaleX: 1.25, 
-                scaleY: 0.75, 
+            {
+                scaleX: 1.25,
+                scaleY: 0.75,
                 rotation: gsap.utils.random(-5, 5),
-                duration: 0.15, 
-                yoyo: true, 
+                duration: 0.15,
+                yoyo: true,
                 repeat: 1,
                 ease: "power1.inOut",
                 onComplete: () => {
-                    gsap.to(titleEl, { 
-                        scaleX: 1, 
-                        scaleY: 1, 
+                    gsap.to(titleEl, {
+                        scaleX: 1,
+                        scaleY: 1,
                         rotation: 0,
-                        duration: 1, 
-                        ease: "elastic.out(1.5, 0.2)" 
+                        duration: 1,
+                        ease: "elastic.out(1.5, 0.2)"
                     });
                 }
             }
@@ -120,7 +120,7 @@ if(titleEl) {
 document.addEventListener('mousemove', (e) => {
     const x = (e.clientX / window.innerWidth - 0.5) * 40;
     const y = (e.clientY / window.innerHeight - 0.5) * 40;
-    
+
     gsap.to('.shape-1', { x: x * 1.5, y: y * 1.5, duration: 1, ease: "power2.out" });
     gsap.to('.shape-2', { x: x * -1, y: y * 1.2, duration: 1, ease: "power2.out" });
     gsap.to('.shape-3', { x: x * 1.2, y: y * -1.5, duration: 1, ease: "power2.out" });
@@ -129,7 +129,7 @@ document.addEventListener('mousemove', (e) => {
 
 // Scroll down button logic now points to members section
 const scrollIndicator = document.getElementById('scroll-indicator');
-if(scrollIndicator) {
+if (scrollIndicator) {
     scrollIndicator.addEventListener('click', () => {
         document.getElementById('members-section').scrollIntoView({ behavior: 'smooth' });
     });
@@ -151,16 +151,16 @@ if (savedTheme) {
 themeToggleBtn.addEventListener('click', () => {
     const currentTheme = root.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
+
     // Fun spin animation
     gsap.to(themeToggleBtn, {
         rotation: "+=360",
         scale: 1.2,
         duration: 0.6,
         ease: "back.out(1.5)",
-        onComplete: () => gsap.to(themeToggleBtn, {scale: 1})
+        onComplete: () => gsap.to(themeToggleBtn, { scale: 1 })
     });
-    
+
     root.setAttribute('data-theme', newTheme);
     localStorage.setItem('chaos-theme', newTheme);
 });
@@ -193,9 +193,9 @@ setInterval(() => {
         onComplete: () => {
             currentQuoteIdx = (currentQuoteIdx + 1) % quotes.length;
             dynamicQuoteEl.textContent = quotes[currentQuoteIdx];
-            
+
             gsap.set(dynamicQuoteEl, { y: 20 });
-            
+
             gsap.to(dynamicQuoteEl, {
                 y: 0,
                 opacity: 1,
@@ -233,7 +233,7 @@ const handleFormSubmit = (formId, btnId) => {
     const btn = document.getElementById(btnId);
     const btnText = btn.querySelector('.btn-text');
     const btnLoader = btn.querySelector('.btn-loader');
-    
+
     const errorMsg = formId === 'login-form' ? document.getElementById('error-message') : null;
 
     const loadingMessages = [
@@ -245,9 +245,9 @@ const handleFormSubmit = (formId, btnId) => {
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        
+
         if (errorMsg) errorMsg.classList.add('hidden');
-        
+
         // Button squish effect
         gsap.to(btn, { scale: 0.95, duration: 0.1, yoyo: true, repeat: 1 });
 
@@ -255,26 +255,26 @@ const handleFormSubmit = (formId, btnId) => {
         btnText.classList.add('hidden');
         btnLoader.textContent = randomLoadMsg;
         btnLoader.classList.remove('hidden');
-        
+
         btn.style.pointerEvents = 'none';
-        
+
         setTimeout(() => {
             btnText.classList.remove('hidden');
             btnLoader.classList.add('hidden');
             btn.style.pointerEvents = 'auto';
-            
+
             if (errorMsg) {
                 errorMsg.classList.remove('hidden');
                 // Erratic, funny shake for error
-                gsap.fromTo(errorMsg, 
-                    { x: -10, rotation: -2 }, 
-                    { x: 10, rotation: 2, duration: 0.08, yoyo: true, repeat: 5, ease: "power1.inOut", onComplete: () => gsap.set(errorMsg, {x: 0, rotation: 0}) }
+                gsap.fromTo(errorMsg,
+                    { x: -10, rotation: -2 },
+                    { x: 10, rotation: 2, duration: 0.08, yoyo: true, repeat: 5, ease: "power1.inOut", onComplete: () => gsap.set(errorMsg, { x: 0, rotation: 0 }) }
                 );
             } else {
                 btnText.textContent = "Welcome to the Chaos";
                 setTimeout(() => {
                     gsap.to(formsWrapper, { x: '0%', duration: 0.8, ease: "back.inOut(1.2)" });
-                    btnText.textContent = "Sign Me Up"; 
+                    btnText.textContent = "Sign Me Up";
                 }, 1500);
             }
         }, 2000);
