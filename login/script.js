@@ -7,13 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 document.addEventListener('DOMContentLoaded', () => {
     // Fade in container
     gsap.to('.hero-container', { opacity: 1, duration: 1.2, ease: "power2.inOut" });
-<<<<<<< HEAD
-
-    // Animate Background Blobs randomly for an organic, colorful feel
-=======
-    
     // Animate Background Blobs — vivid, organic, always moving
->>>>>>> 846fbc0a15b3cc5439ae7d90731caa46fb04bb79
     const blobs = document.querySelectorAll('.blob');
     blobs.forEach((blob, i) => {
         // Each blob gets its own unique motion path
@@ -249,15 +243,7 @@ setInterval(() => {
         onComplete: () => {
             currentQuoteIdx = (currentQuoteIdx + 1) % quotes.length;
             dynamicQuoteEl.textContent = quotes[currentQuoteIdx];
-<<<<<<< HEAD
-
-            gsap.set(dynamicQuoteEl, { y: 20 });
-
-=======
-            
             gsap.set(dynamicQuoteEl, t.in);
-            
->>>>>>> 846fbc0a15b3cc5439ae7d90731caa46fb04bb79
             gsap.to(dynamicQuoteEl, {
                 ...t.back,
                 duration: 0.45,
