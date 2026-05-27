@@ -259,11 +259,13 @@ export default function App() {
       setSymbol(symbol);
       setRoomId(roomState.id);
       setRoomState(roomState);
-      setScreen('game');
+      setScreen('waiting');
+      setStatusMsg('Connection Established. Ready.');
     });
 
     // Handle game updates
     socket.on('roomStateUpdate', (newRoomState) => {
+      
       setRoomState(prev => {
         // Play sounds on outcome trigger
         if (newRoomState.winner && (!prev || !prev.winner)) {
@@ -839,32 +841,41 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Copy Invite Link panel */}
-              <div className="flex flex-col gap-2">
-                <span className="text-[10px] font-bold text-slate-400 text-left block">INVITATION SHARING LINK</span>
-                <div className="flex gap-2 w-full">
-                  <input 
-                    type="text" 
-                    readOnly 
-                    value={`${window.location.origin}?room=${roomId}`}
-                    className="flex-1 bg-black/30 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-400 focus:outline-none truncate"
-                  />
-                  <button 
-                    onClick={handleCopyLink}
-                    className="glass-panel glass-panel-interactive px-4 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold text-slate-200"
-                    aria-label="Copy invitation link"
-                  >
-                    {copied ? (
-                      <span className="text-emerald-400 font-bold">COPIED</span>
-                    ) : (
-                      <>
-                        <Copy className="w-3.5 h-3.5" />
-                        <span>COPY</span>
-                      </>
-                    )}
-                  </button>
+              {/* If opponent joined, show Enter Game button, else show copy link */}
+              {roomState && roomState.players.length === 2 ? (
+                <button 
+                  onClick={() => { playClick(); setScreen('game'); }}
+                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold py-3.5 rounded-xl transition-all shadow-glow-purple tracking-wider uppercase mt-2 animate-pulse"
+                >
+                  ENTER THE GAME
+                </button>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <span className="text-[10px] font-bold text-slate-400 text-left block">INVITATION SHARING LINK</span>
+                  <div className="flex gap-2 w-full">
+                    <input 
+                      type="text" 
+                      readOnly 
+                      value={`${window.location.origin}?room=${roomId}`}
+                      className="flex-1 bg-black/30 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-400 focus:outline-none truncate"
+                    />
+                    <button 
+                      onClick={handleCopyLink}
+                      className="glass-panel glass-panel-interactive px-4 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold text-slate-200"
+                      aria-label="Copy invitation link"
+                    >
+                      {copied ? (
+                        <span className="text-emerald-400 font-bold">COPIED</span>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>COPY</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             <button 
