@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 import { Users, Cpu, RefreshCw, Trophy, Clipboard, Copy, Wifi, WifiOff, Plus, UserPlus } from 'lucide-react';
 
 // Connect to socket backend dynamically
-const SOCKET_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : window.location.origin;
+const SOCKET_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://localhost:5000' : window.location.origin;
 
 // Funny quotes for verdicts
 const defeatQuotes = [
@@ -24,6 +24,29 @@ const drawQuotes = [
 const winQuotes = [
   "THE IMPOSSIBLE HAS OCCURRED. {name} is the Chosen One!",
   "System breach! {name} has outsmarted the algorithm!"
+];
+
+const funnyQuotes = [
+  "Probably debugging. Probably crying.",
+  "Attendance: 74.9%. We live on the edge.",
+  "One login away from dropping out.",
+  "Gamers. Coders. Sleep deprived.",
+  "Today's probability of passing: 3%.",
+  "We don't need sleep, we need coffee.",
+  "4 years of engineering, 40 years of trauma.",
+  "The code works, but we don't know why.",
+  "Ctrl+C, Ctrl+V, and Insha'Allah.",
+  "Friends who fail together, stay together.",
+  "WiFi > Lectures. Always.",
+  "Our backup plan is also failing.",
+  "GPA is just a number. A very sad number.",
+  "Deadline tomorrow? Start tomorrow.",
+  "We peaked in 12th grade.",
+  "Hostel food built different. So did our immunity.",
+  "Professor said 'easy paper'. We cried anyway.",
+  "One brain cell. Shared among 5 friends.",
+  "Running on caffeine, copium, and vibes.",
+  "Trauma ends. GPA doesn't."
 ];
 
 const CELL_CENTERS = [
@@ -107,6 +130,18 @@ export default function App() {
   const [screen, setScreen] = useState('login'); // 'login', 'waiting', 'game'
   const [loginTab, setLoginTab] = useState('create');
   const [gameMode, setGameMode] = useState('multiplayer');
+  const [currentQuote, setCurrentQuote] = useState(funnyQuotes[0]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentQuote(prev => {
+        const currentIndex = funnyQuotes.indexOf(prev);
+        const nextIndex = (currentIndex + 1) % funnyQuotes.length;
+        return funnyQuotes[nextIndex];
+      });
+    }, 800);
+    return () => clearInterval(interval);
+  }, []);
   const [aiDifficulty, setAiDifficulty] = useState('impossible');
   const [isAiThinking, setIsAiThinking] = useState(false);
   
@@ -567,15 +602,86 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-center items-center px-2 sm:px-4 overflow-hidden text-slate-200">
+    <div className="relative min-h-screen flex flex-col lg:flex-row overflow-hidden text-slate-200">
       
       {/* Floating Background Neon Glow Blobs */}
       <div className="glow-blob glow-blob-1"></div>
       <div className="glow-blob glow-blob-2"></div>
       <div className="glow-blob glow-blob-3"></div>
 
-      {/* Main Container */}
-      <main className="relative z-10 w-full max-w-[380px] sm:max-w-md px-2 sm:px-4 py-4 sm:py-8 flex flex-col justify-between items-center min-h-[100dvh] sm:min-h-[92vh] select-none fade-in">
+      {/* ===== LEFT BRANDING PANEL — Desktop only ===== */}
+      <aside className="hidden lg:flex flex-col justify-between flex-1 min-h-screen px-14 py-12 relative z-10 border-r border-white/5">
+        {/* Top: Club badge */}
+        <div>
+          <div className="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 px-4 py-2 rounded-full text-xs font-bold text-indigo-300 tracking-widest uppercase mb-10">
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            CHAOS POKERS PRESENT
+          </div>
+
+          <h1 className="text-6xl xl:text-7xl font-black tracking-tight leading-none mb-4 game-title">
+            TIC TAC TOE
+          </h1>
+          <p className="text-slate-400 text-lg font-medium mb-2">Real-Time Casino Multiplayer</p>
+          <p className="text-amber-400 text-sm font-bold italic min-h-[1.4rem] transition-all duration-300">
+            &ldquo;{currentQuote}&rdquo;
+          </p>
+        </div>
+
+        {/* Middle: Decorative animated tic-tac-toe grid */}
+        <div className="my-auto py-10">
+          <div className="grid grid-cols-3 gap-3 w-56 xl:w-64 mx-auto">
+            {['X','O','X','O','X','O','X','O','X'].map((sym, i) => (
+              <div
+                key={i}
+                className="aspect-square rounded-2xl flex items-center justify-center"
+                style={{
+                  background: 'rgba(255,255,255,0.025)',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  animation: `slide-up-fade 0.5s cubic-bezier(0.16,1,0.3,1) forwards`,
+                  animationDelay: `${i * 0.07}s`,
+                  opacity: 0
+                }}
+              >
+                {sym === 'X' ? (
+                  <svg className="w-8 h-8 xl:w-10 xl:h-10 text-cyan-neon symbol-breathe" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                ) : (
+                  <svg className="w-8 h-8 xl:w-10 xl:h-10 text-rose-neon symbol-breathe" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                    <circle cx="12" cy="12" r="10"/>
+                  </svg>
+                )}
+              </div>
+            ))}
+          </div>
+          {/* Diagonal win line overlay */}
+          <div className="flex justify-center mt-4">
+            <span className="text-[10px] font-black tracking-widest text-slate-500 uppercase">Real-time · AI · Local · Offline</span>
+          </div>
+        </div>
+
+        {/* Bottom: Stats row */}
+        <div className="flex gap-8">
+          <div>
+            <div className="text-2xl font-black game-title">∞</div>
+            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Rounds</div>
+          </div>
+          <div>
+            <div className="text-2xl font-black" style={{color:'var(--color-x)'}}>4</div>
+            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Game Modes</div>
+          </div>
+          <div>
+            <div className="text-2xl font-black" style={{color:'var(--color-o)'}}>0ms</div>
+            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Lag</div>
+          </div>
+        </div>
+      </aside>
+
+      {/* ===== RIGHT GAME PANEL ===== */}
+      <main className="relative z-10 w-[90%] max-w-[420px] mx-auto lg:w-[45%] lg:max-w-[520px] lg:mx-0 px-2 lg:px-10 py-4 sm:py-8 flex flex-col justify-between items-center min-h-screen select-none fade-in">
         
         {/* Error Toast Message */}
         {errorMsg && (
@@ -600,51 +706,60 @@ export default function App() {
           )}
         </div>
 
-        {/* Header Section */}
-        <header className="w-full flex flex-col items-center text-center mb-4">
-          <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/25 px-3 py-1 rounded-full text-xs font-semibold text-indigo-400 tracking-wider uppercase mb-3 shadow-glow-purple">
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        {/* Header Section — mobile only, hidden on desktop where left panel shows it */}
+        <header className="w-full flex flex-col items-center text-center mb-4 lg:hidden">
+          <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/25 px-3.5 py-1 rounded-full text-xs font-bold text-indigo-400 tracking-wider uppercase mb-3 shadow-glow-purple">
+            <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
             </svg>
-            Pok-Pok Website
+            CHAOS POKERS PRESENT
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-white mb-1 font-outfit bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400">
+          <h1 className="text-4xl font-extrabold tracking-tight mb-1 font-outfit game-title">
             TIC TAC TOE
           </h1>
           <p className="text-sm text-slate-400 font-medium">Real-Time Casino Multiplayer</p>
+          <div className="text-xs text-amber-400 font-bold italic mt-1.5 min-h-[1.2rem] tracking-wide transition-all duration-300">
+            &ldquo;{currentQuote}&rdquo;
+          </div>
+        </header>
+
+        {/* Desktop-only compact header for right panel */}
+        <header className="w-full hidden lg:flex flex-col items-start text-left mb-6">
+          <h2 className="text-2xl font-black text-white tracking-tight">Game Lobby</h2>
+          <p className="text-xs text-slate-500 font-medium mt-0.5">Pick a mode &amp; enter the arena</p>
         </header>
 
         {/* --- SCREEN 1: LOGIN / JOIN FORM --- */}
         {screen === 'login' && (
-          <section className="w-full flex flex-col gap-6 my-auto scale-in">
+          <section className="w-full flex flex-col gap-5 my-auto scale-in">
             
             {/* Segmented Mode Button selectors */}
             <div className="glass-panel p-1 rounded-xl flex w-full relative">
               <button 
                 type="button"
                 onClick={() => { playClick(); setLoginTab('create'); }}
-                className={`flex-1 py-2 text-[10px] sm:text-xs font-semibold rounded-lg transition-all duration-300 z-10 segment-btn ${loginTab === 'create' ? 'bg-white/10 text-white' : 'text-slate-400'}`}
+                className={`flex-1 py-2.5 text-[10px] sm:text-xs font-bold rounded-lg transition-all duration-300 z-10 segment-btn ${loginTab === 'create' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'}`}
               >
                 CREATE
               </button>
               <button 
                 type="button"
                 onClick={() => { playClick(); setLoginTab('join'); }}
-                className={`flex-1 py-2 text-[10px] sm:text-xs font-semibold rounded-lg transition-all duration-300 z-10 segment-btn ${loginTab === 'join' ? 'bg-white/10 text-white' : 'text-slate-400'}`}
+                className={`flex-1 py-2.5 text-[10px] sm:text-xs font-bold rounded-lg transition-all duration-300 z-10 segment-btn ${loginTab === 'join' ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'}`}
               >
                 JOIN
               </button>
               <button 
                 type="button"
                 onClick={() => { playClick(); setLoginTab('ai'); }}
-                className={`flex-1 py-2 text-[10px] sm:text-xs font-semibold rounded-lg transition-all duration-300 z-10 segment-btn ${loginTab === 'ai' ? 'bg-indigo-500/20 text-indigo-300' : 'text-slate-400'}`}
+                className={`flex-1 py-2.5 text-[10px] sm:text-xs font-bold rounded-lg transition-all duration-300 z-10 segment-btn ${loginTab === 'ai' ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'}`}
               >
                 VS AI
               </button>
               <button 
                 type="button"
                 onClick={() => { playClick(); setLoginTab('offline'); }}
-                className={`flex-1 py-2 text-[10px] sm:text-xs font-semibold rounded-lg transition-all duration-300 z-10 segment-btn ${loginTab === 'offline' ? 'bg-emerald-500/20 text-emerald-300' : 'text-slate-400'}`}
+                className={`flex-1 py-2.5 text-[10px] sm:text-xs font-bold rounded-lg transition-all duration-300 z-10 segment-btn ${loginTab === 'offline' ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'}`}
               >
                 OFFLINE
               </button>
@@ -948,7 +1063,7 @@ export default function App() {
             )}
 
             {/* Main Game Board Panel */}
-            <div className="relative w-full max-w-[320px] sm:max-w-[360px] aspect-square glass-panel glass-panel-glow rounded-3xl p-2 sm:p-3 mb-4 sm:mb-6 shadow-glow-purple">
+            <div className="relative w-full max-w-full sm:max-w-[420px] aspect-square glass-panel glass-panel-glow rounded-3xl p-2 sm:p-3 mb-4 sm:mb-6 shadow-glow-purple">
               
               {/* SVG winning line overlay */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-20">
@@ -1039,13 +1154,13 @@ export default function App() {
                     aria-label={`Cell ${idx + 1}, ${cell === null ? 'empty' : cell}`}
                   >
                     {cell === 'X' && (
-                      <svg className="w-12 h-12 text-cyan-neon scale-in symbol-breathe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <svg className="w-12 h-12 sm:w-16 sm:h-16 text-cyan-neon scale-in symbol-breathe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                       </svg>
                     )}
                     {cell === 'O' && (
-                      <svg className="w-12 h-12 text-rose-neon scale-in symbol-breathe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <svg className="w-12 h-12 sm:w-16 sm:h-16 text-rose-neon scale-in symbol-breathe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10" />
                       </svg>
                     )}

@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         delay: 1.5
     });
 
-    // Scroll Animations for Members and Events Sections
+    // Scroll Animations for Members, Break, and Events Sections
     gsap.utils.toArray('.gs-reveal-event').forEach(function (elem) {
         gsap.from(elem, {
             scrollTrigger: {
@@ -87,6 +87,28 @@ document.addEventListener('DOMContentLoaded', () => {
             ease: "back.out(1.2)"
         });
     });
+
+    // Play Button hover fun animation
+    const playBtn = document.getElementById('play-tictactoe-btn');
+    if (playBtn) {
+        playBtn.addEventListener('mouseenter', () => {
+            gsap.to(playBtn, {
+                scale: 1.06,
+                duration: 0.3,
+                ease: "back.out(1.5)"
+            });
+        });
+        playBtn.addEventListener('mouseleave', () => {
+            gsap.to(playBtn, {
+                scale: 1,
+                duration: 0.4,
+                ease: "elastic.out(1, 0.3)"
+            });
+        });
+    }
+
+    // Re-initialize Lucide icons for dynamically added content
+    lucide.createIcons();
 });
 
 // Fun tap/click interaction for the title
