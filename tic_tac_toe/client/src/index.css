@@ -8,8 +8,8 @@
   --color-dark-border: rgba(255, 255, 255, 0.05);
   --color-dark-accent: #6366F1;
   
-  --font-outfit: 'Outfit', sans-serif;
-  --font-ui: 'Plus Jakarta Sans', sans-serif;
+  --font-outfit: 'Times New Roman', Times, serif;
+  --font-ui: 'Times New Roman', Times, serif;
   
   --shadow-glow-purple: 0 0 20px rgba(99, 102, 241, 0.15);
   --shadow-glow-cyan: 0 0 20px rgba(6, 182, 212, 0.18);
@@ -27,7 +27,7 @@
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Times New Roman', Times, serif;
   background: radial-gradient(circle at 50% 50%, var(--color-bg-end) 0%, var(--color-bg-start) 100%);
   min-height: 100vh;
   margin: 0;
@@ -167,7 +167,7 @@ body {
   justify-content: center;
   font-size: 2.25rem;
   font-weight: 800;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Times New Roman', Times, serif;
   opacity: 0;
   transition: opacity 0.2s ease, transform 0.25s ease;
   pointer-events: none;
@@ -308,4 +308,39 @@ div[data-turn="O"] .cell-empty:hover::before {
   .cell-empty::before {
     font-size: 1.75rem;
   }
+}
+
+/* Scale in entrance for SVGs */
+.scale-in {
+  animation: scale-in-anim 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes scale-in-anim {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Stagger entrance for grid cells */
+.cell {
+  animation: slide-up-fade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+.cell:nth-child(1) { animation-delay: 0.05s; }
+.cell:nth-child(2) { animation-delay: 0.1s; }
+.cell:nth-child(3) { animation-delay: 0.15s; }
+.cell:nth-child(4) { animation-delay: 0.2s; }
+.cell:nth-child(5) { animation-delay: 0.25s; }
+.cell:nth-child(6) { animation-delay: 0.3s; }
+.cell:nth-child(7) { animation-delay: 0.35s; }
+.cell:nth-child(8) { animation-delay: 0.4s; }
+.cell:nth-child(9) { animation-delay: 0.45s; }
+
+/* Continuous breathe for symbols */
+.symbol-breathe {
+  animation: breathe-anim 3s infinite ease-in-out;
+}
+
+@keyframes breathe-anim {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
 }

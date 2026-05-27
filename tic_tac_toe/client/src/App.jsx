@@ -112,6 +112,7 @@ export default function App() {
   
   // --- FORM INPUTS ---
   const [name, setName] = useState('');
+  const [player2Name, setPlayer2Name] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [joinRoomId, setJoinRoomId] = useState('');
@@ -350,6 +351,33 @@ export default function App() {
   // --- ACTIONS ---
 
   
+  
+  const handleStartOfflineGameSubmit = (e) => {
+    e.preventDefault();
+    playClick();
+    if (!name.trim() || !player2Name.trim()) {
+      setErrorMsg('Please enter both player names.');
+      return;
+    }
+    setGameMode('offline');
+    setSymbol('X'); // Local device plays as both, but we start viewing from X's perspective
+    setRoomId('LOCAL');
+    setRoomState({
+      id: 'LOCAL',
+      players: [
+        { id: 'local1', name: name.trim().toUpperCase(), symbol: 'X', connected: true },
+        { id: 'local2', name: player2Name.trim().toUpperCase(), symbol: 'O', connected: true }
+      ],
+      board: Array(9).fill(null),
+      turn: 'X',
+      gameActive: true,
+      winner: null,
+      winLine: null,
+      rematchRequests: []
+    });
+    setScreen('game');
+  };
+
   const handleStartAiGameSubmit = (e) => {
     e.preventDefault();
     playClick();
@@ -405,23 +433,39 @@ export default function App() {
     if (!roomState || !roomState.gameActive || roomState.board[cellIndex] !== null || isAiThinking) return;
     
     // Check if it is my turn
-    if (roomState.turn !== symbol) return;
+    if (roomState.turn !== symbol && gameMode !== 'offline') return;
 
     playClick();
 
-    if (gameMode === 'ai') {
+    if (gameMode === 'ai' || gameMode === 'offline') {
+      const currentTurnSymbol = roomState.turn;
+      const nextTurnSymbol = currentTurnSymbol === 'X' ? 'O' : 'X';
+      
+      // For offline mode, both players click on the same device, so we just use the current turn's symbol
+      const moveSymbol = gameMode === 'offline' ? currentTurnSymbol : symbol;
+      
       const newBoard = [...roomState.board];
-      newBoard[cellIndex] = symbol;
+      newBoard[cellIndex] = moveSymbol;
       const res = checkWinner(newBoard);
-      setRoomState(prev => ({
-        ...prev,
-        board: newBoard,
-        turn: res ? prev.turn : 'O',
-        gameActive: !res,
-        winner: res ? res.winner : null,
-        winLine: res ? res.line : null
-      }));
-    } else {
+      
+      setRoomState(prev => {
+        if (res) {
+          if (res.winner === 'draw') playDraw();
+          else playWin();
+        }
+        return {
+          ...prev,
+          board: newBoard,
+          turn: res ? prev.turn : nextTurnSymbol,
+          gameActive: !res,
+          winner: res ? res.winner : null,
+          winLine: res ? res.line : null
+        };
+      });
+      
+      // If AI mode, we stop here and let the useEffect handle AI's turn
+      if (gameMode === 'ai' && !res) return;
+    } else if (gameMode === 'multiplayer') {
       socketRef.current.emit('makeMove', { roomId, cellIndex });
     }
   };
@@ -437,7 +481,7 @@ export default function App() {
 
   const handleRequestRematch = () => {
     playClick();
-    if (gameMode === 'ai') {
+    if (gameMode === 'ai' || gameMode === 'offline') {
       setRoomState(prev => ({
         ...prev,
         board: Array(9).fill(null),
@@ -521,7 +565,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-center items-center px-4 overflow-hidden text-slate-200">
+    <div className="relative min-h-screen flex flex-col justify-center items-center px-2 sm:px-4 overflow-hidden text-slate-200">
       
       {/* Floating Background Neon Glow Blobs */}
       <div className="glow-blob glow-blob-1"></div>
@@ -529,7 +573,7 @@ export default function App() {
       <div className="glow-blob glow-blob-3"></div>
 
       {/* Main Container */}
-      <main className="relative z-10 w-full max-w-md px-4 py-8 flex flex-col justify-between items-center min-h-[92vh] select-none fade-in">
+      <main className="relative z-10 w-full max-w-[380px] sm:max-w-md px-2 sm:px-4 py-4 sm:py-8 flex flex-col justify-between items-center min-h-[100dvh] sm:min-h-[92vh] select-none fade-in">
         
         {/* Error Toast Message */}
         {errorMsg && (
@@ -595,19 +639,28 @@ export default function App() {
               >
                 VS AI
               </button>
+              <button 
+                type="button"
+                onClick={() => { playClick(); setLoginTab('offline'); }}
+                className={`flex-1 py-2 text-[10px] sm:text-xs font-semibold rounded-lg transition-all duration-300 z-10 segment-btn ${loginTab === 'offline' ? 'bg-emerald-500/20 text-emerald-300' : 'text-slate-400'}`}
+              >
+                OFFLINE
+              </button>
             </div>
 
             {/* Registration Form container */}
             <div className="glass-panel p-6 rounded-3xl border border-indigo-500/10 shadow-glow-purple">
                             <h2 className="text-lg font-black text-white mb-1 tracking-tight font-outfit uppercase">
-                {loginTab === 'join' ? 'Join Game Session' : loginTab === 'ai' ? 'Play Against AI' : 'Initiate Game Lobbies'}
+                {loginTab === 'join' ? 'Join Game Session' : loginTab === 'ai' ? 'Play Against AI' : loginTab === 'offline' ? 'Local Offline Match' : 'Initiate Game Lobbies'}
               </h2>
               <p className="text-xs text-slate-400 mb-6 leading-relaxed">
                 {loginTab === 'join' 
                   ? 'Enter your name to connect to your opponent\'s multiplayer room.' 
                   : loginTab === 'ai'
                     ? 'Select your difficulty level and face the supercomputer.'
-                    : 'Register your legal credentials to allocate a unique game room.'}
+                    : loginTab === 'offline'
+                      ? 'Pass the phone to play locally with a friend.'
+                      : 'Register your legal credentials to allocate a unique game room.'}
               </p>
 
               {loginTab === 'create' && (
@@ -722,6 +775,41 @@ export default function App() {
                   </button>
                 </form>
               )}
+
+              {loginTab === 'offline' && (
+                // OFFLINE ROOM FORM
+                <form onSubmit={handleStartOfflineGameSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] font-bold text-cyan-400 tracking-wider uppercase mb-1.5">Player 1 Name (X)</label>
+                    <input 
+                      type="text" 
+                      required 
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Enter Player 1 Name" 
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all text-center"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-rose-400 tracking-wider uppercase mb-1.5">Player 2 Name (O)</label>
+                    <input 
+                      type="text" 
+                      required 
+                      value={player2Name}
+                      onChange={(e) => setPlayer2Name(e.target.value)}
+                      placeholder="Enter Player 2 Name" 
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all text-center"
+                    />
+                  </div>
+                  <button 
+                    type="submit" 
+                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-3 rounded-xl transition-all shadow-glow-purple tracking-wider uppercase font-outfit mt-2"
+                  >
+                    START LOCAL MATCH
+                  </button>
+                </form>
+              )}
+
             </div>
           </section>
         )}
@@ -812,28 +900,44 @@ export default function App() {
               </div>
             </div>
 
-            {/* Turn indication slider */}
-            <div className="glass-panel px-1 py-1 rounded-full flex w-48 relative overflow-hidden mb-6">
-              {/* Background Slider Pill */}
-              <div 
-                className="absolute top-1 left-1 bottom-1 w-[calc(50%-4px)] rounded-full turn-pill-active shadow-md"
-                style={{
-                  transform: roomState.turn === 'X' ? 'translateX(0%)' : 'translateX(100%)',
-                  backgroundColor: roomState.turn === 'X' ? 'var(--color-x)' : 'var(--color-o)'
-                }}
-              ></div>
-              
-              {/* Labels */}
-              <div className={`flex-1 text-center py-1.5 text-xs font-bold z-10 transition-colors duration-300 cursor-default ${roomState.turn === 'X' ? 'text-white' : 'text-slate-400'}`}>
-                {player1 ? `${player1.name.split(' ')[0]}'S TURN` : 'X TURN'}
+            {/* Turn indication slider OR Rematch Button */}
+            {roomState.gameActive ? (
+              <div className="glass-panel px-1 py-1 rounded-full flex w-52 sm:w-60 relative overflow-hidden mb-4 sm:mb-6">
+                {/* Background Slider Pill */}
+                <div 
+                  className="absolute top-1 left-1 bottom-1 w-[calc(50%-4px)] rounded-full turn-pill-active shadow-md"
+                  style={{
+                    transform: roomState.turn === 'X' ? 'translateX(0%)' : 'translateX(100%)',
+                    backgroundColor: roomState.turn === 'X' ? 'var(--color-x)' : 'var(--color-o)'
+                  }}
+                ></div>
+                
+                {/* Labels */}
+                <div className={`flex-1 text-center py-1.5 text-[10px] sm:text-xs font-bold z-10 transition-colors duration-300 cursor-default truncate px-2 ${roomState.turn === 'X' ? 'text-white' : 'text-slate-400'}`}>
+                  {player1 ? `${player1.name.split(' ')[0]}'S TURN` : 'X TURN'}
+                </div>
+                <div className={`flex-1 text-center py-1.5 text-[10px] sm:text-xs font-bold z-10 transition-colors duration-300 cursor-default truncate px-2 ${roomState.turn === 'O' ? 'text-white' : 'text-slate-400'}`}>
+                  {player2 ? `${player2.name.split(' ')[0]}'S TURN` : 'O TURN'}
+                </div>
               </div>
-              <div className={`flex-1 text-center py-1.5 text-xs font-bold z-10 transition-colors duration-300 cursor-default ${roomState.turn === 'O' ? 'text-white' : 'text-slate-400'}`}>
-                {player2 ? `${player2.name.split(' ')[0]}'S TURN` : 'O TURN'}
-              </div>
-            </div>
+            ) : (
+              <button 
+                onClick={handleRequestRematch}
+                disabled={rematchRequests.includes(socketRef.current?.id)}
+                className="w-52 sm:w-60 bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-2 sm:py-2.5 rounded-full flex items-center justify-center gap-2 text-xs sm:text-sm font-black shadow-glow-purple mb-4 sm:mb-6 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse"
+                aria-label="Request Rematch"
+              >
+                <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 ${rematchRequests.includes(socketRef.current?.id) ? 'animate-spin' : ''}`} />
+                {rematchRequests.includes(socketRef.current?.id) 
+                  ? 'WAITING...' 
+                  : rematchRequests.length > 0 
+                    ? 'ACCEPT REMATCH'
+                    : 'REQUEST REMATCH'}
+              </button>
+            )}
 
             {/* Main Game Board Panel */}
-            <div className="relative w-full max-w-[360px] aspect-square glass-panel glass-panel-glow rounded-3xl p-3 mb-6 shadow-glow-purple">
+            <div className="relative w-full max-w-[320px] sm:max-w-[360px] aspect-square glass-panel glass-panel-glow rounded-3xl p-2 sm:p-3 mb-4 sm:mb-6 shadow-glow-purple">
               
               {/* SVG winning line overlay */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-20">
@@ -875,7 +979,7 @@ export default function App() {
                   <div className="text-center p-6">
                     <div 
                       id="verdict-stamp" 
-                      className={`inline-block border-4 px-6 py-2 rounded-xl text-xl font-black tracking-widest uppercase mb-4 transform -rotate-12 ${
+                      className={`inline-block border-[3px] sm:border-4 px-4 sm:px-6 py-1.5 sm:py-2 rounded-xl text-base sm:text-xl font-black tracking-widest uppercase mb-2 sm:mb-4 transform -rotate-12 ${
                         roomState.winner === 'draw' 
                           ? 'border-slate-400 text-slate-400 shadow-[0_0_20px_rgba(148,163,184,0.35)]'
                           : roomState.winner === symbol 
@@ -924,13 +1028,13 @@ export default function App() {
                     aria-label={`Cell ${idx + 1}, ${cell === null ? 'empty' : cell}`}
                   >
                     {cell === 'X' && (
-                      <svg className="w-12 h-12 text-cyan-neon scale-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <svg className="w-12 h-12 text-cyan-neon scale-in symbol-breathe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                       </svg>
                     )}
                     {cell === 'O' && (
-                      <svg className="w-12 h-12 text-rose-neon scale-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <svg className="w-12 h-12 text-rose-neon scale-in symbol-breathe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10" />
                       </svg>
                     )}
@@ -944,7 +1048,7 @@ export default function App() {
             <div className="text-center h-6 mb-6" aria-live="polite">
               <span className="text-xs font-semibold tracking-wide text-slate-300 uppercase transition-all duration-300">
                 {roomState.gameActive ? (
-                  isMyTurn ? (
+                  (isMyTurn || gameMode === "offline") ? (
                     <span className="text-indigo-400 animate-pulse font-bold">YOUR MOVE</span>
                   ) : (
                     <span>WAITING FOR OPPONENT...</span>
@@ -966,9 +1070,9 @@ export default function App() {
 
               {/* Lobbies Stats draws */}
               <div className="glass-panel score-box rounded-xl p-3 flex flex-col items-center justify-center text-center">
-                <span className="text-[9px] font-bold text-slate-400 tracking-wider uppercase mb-1">YOUR SYMBOL</span>
-                <span className={`text-lg font-black font-outfit uppercase ${symbol === 'X' ? 'text-cyan-400 text-cyan-neon' : 'text-rose-400 text-rose-neon'}`}>
-                  {symbol}
+                <span className="text-[9px] font-bold text-slate-400 tracking-wider uppercase mb-1">{gameMode === 'offline' ? 'CURRENT TURN' : 'YOUR SYMBOL'}</span>
+                <span className={`text-lg font-black font-outfit uppercase ${(gameMode === 'offline' ? roomState.turn : symbol) === 'X' ? 'text-cyan-400 text-cyan-neon' : 'text-rose-400 text-rose-neon'}`}>
+                  {gameMode === 'offline' ? roomState.turn : symbol}
                 </span>
               </div>
 
@@ -982,40 +1086,14 @@ export default function App() {
 
             {/* Footer Action buttons */}
             <footer className="w-full flex gap-3 justify-center mt-2">
-              {!roomState.gameActive ? (
-                <>
-                  <button 
-                    onClick={handleRequestRematch}
-                    disabled={rematchRequests.includes(socketRef.current?.id)}
-                    className="glass-panel glass-panel-interactive px-6 py-2.5 rounded-full flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                    aria-label="Request Rematch"
-                  >
-                    <RefreshCw className="w-4 h-4 transition-transform duration-300 hover:rotate-180" />
-                    {rematchRequests.includes(socketRef.current?.id) 
-                      ? `REMATCH SENT (${rematchRequests.length}/2)` 
-                      : rematchRequests.length > 0 
-                        ? `ACCEPT REMATCH (1/2)`
-                        : 'REQUEST REMATCH'}
-                  </button>
-                  <button 
-                    onClick={handleCreateNewRoom}
-                    className="glass-panel glass-panel-interactive px-6 py-2.5 rounded-full flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-white"
-                    aria-label="New Room"
-                  >
-                    <Plus className="w-4 h-4" />
-                    CREATE NEW ROOM
-                  </button>
-                </>
-              ) : (
-                <button 
-                  onClick={handleCreateNewRoom}
-                  className="glass-panel glass-panel-interactive px-6 py-2.5 rounded-full flex items-center gap-2 text-xs font-bold text-rose-400 hover:text-rose-300"
-                  aria-label="Abandon match"
-                >
-                  <Plus className="w-4 h-4 rotate-45" />
-                  ABANDON ROUND
-                </button>
-              )}
+              <button 
+                onClick={handleCreateNewRoom}
+                className={`glass-panel glass-panel-interactive px-6 py-2.5 rounded-full flex items-center gap-2 text-[10px] sm:text-xs font-bold hover:text-white ${!roomState.gameActive ? 'text-slate-300' : 'text-rose-400 hover:text-rose-300'}`}
+                aria-label={!roomState.gameActive ? 'New Room' : 'Abandon match'}
+              >
+                <Plus className={`w-4 h-4 ${!roomState.gameActive ? '' : 'rotate-45'}`} />
+                {!roomState.gameActive ? 'CREATE NEW ROOM' : 'ABANDON ROUND'}
+              </button>
             </footer>
 
           </section>
