@@ -8,17 +8,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fade in container
     gsap.to('.hero-container', { opacity: 1, duration: 1.2, ease: "power2.inOut" });
     
-    // Animate Background Blobs randomly for an organic, colorful feel
+    // Animate Background Blobs — vivid, organic, always moving
     const blobs = document.querySelectorAll('.blob');
-    blobs.forEach(blob => {
+    blobs.forEach((blob, i) => {
+        // Each blob gets its own unique motion path
         gsap.to(blob, {
-            x: () => gsap.utils.random(-300, 300),
-            y: () => gsap.utils.random(-300, 300),
-            scale: () => gsap.utils.random(0.8, 1.4),
-            duration: () => gsap.utils.random(15, 25),
+            x: () => gsap.utils.random(-400, 400),
+            y: () => gsap.utils.random(-400, 400),
+            scale: () => gsap.utils.random(0.7, 1.6),
+            rotation: () => gsap.utils.random(-60, 60),
+            duration: () => gsap.utils.random(10, 20),
             repeat: -1,
             yoyo: true,
-            ease: "sine.inOut"
+            ease: "sine.inOut",
+            delay: i * 1.5
         });
     });
     
@@ -165,46 +168,93 @@ themeToggleBtn.addEventListener('click', () => {
     localStorage.setItem('chaos-theme', newTheme);
 });
 
-// 10 Funny/Emotional B.Tech Quotes Loop
+// Background blobs pulse on scroll for extra depth
+window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    gsap.to('.blob-1', { x: scrollY * 0.1, y: scrollY * -0.05, duration: 1, ease: "power1.out" });
+    gsap.to('.blob-2', { x: scrollY * -0.08, y: scrollY * 0.06, duration: 1, ease: "power1.out" });
+    gsap.to('.blob-3', { x: scrollY * 0.06, y: scrollY * 0.08, duration: 1, ease: "power1.out" });
+    gsap.to('.blob-4', { x: scrollY * -0.1, y: scrollY * -0.07, duration: 1, ease: "power1.out" });
+});
+
+// 20 Funny/Emotional B.Tech Quotes
 const quotes = [
     "Probably debugging. Probably crying.",
     "Attendance: 74.9%. We live on the edge.",
     "One login away from dropping out.",
     "Gamers. Coders. Sleep deprived.",
-    "Today’s probability of passing: 3%.",
+    "Today's probability of passing: 3%.",
     "We don't need sleep, we need coffee.",
     "4 years of engineering, 40 years of trauma.",
     "The code works, but we don't know why.",
     "Ctrl+C, Ctrl+V, and Insha'Allah.",
-    "Friends who fail together, stay together."
+    "Friends who fail together, stay together.",
+    "WiFi > Lectures. Always.",
+    "Our backup plan is also failing.",
+    "GPA is just a number. A very sad number.",
+    "Deadline tomorrow? Start tomorrow.",
+    "We peaked in 12th grade.",
+    "Hostel food built different. So did our immunity.",
+    "Professor said 'easy paper'. We cried anyway.",
+    "One brain cell. Shared among 5 friends.",
+    "Running on caffeine, copium, and vibes.",
+    "Semester ends. Trauma doesn't."
 ];
 
 let currentQuoteIdx = 0;
 const dynamicQuoteEl = document.getElementById('dynamic-quote');
 dynamicQuoteEl.textContent = quotes[currentQuoteIdx];
 
-// Cycle quotes every 3.5s with a smooth 0.8s slide transition
+// 4 different transition styles for variety
+const transitions = [
+    // 1. Slide up
+    {
+        out: { y: -25, opacity: 0, scale: 1, rotation: 0 },
+        in:  { y: 25 },
+        back: { y: 0, opacity: 1, scale: 1, rotation: 0 }
+    },
+    // 2. Scale pop
+    {
+        out: { y: 0, opacity: 0, scale: 0.5, rotation: 0 },
+        in:  { y: 0, scale: 1.3 },
+        back: { y: 0, opacity: 1, scale: 1, rotation: 0 }
+    },
+    // 3. Slide right
+    {
+        out: { x: -40, opacity: 0, scale: 1, rotation: 0 },
+        in:  { x: 40 },
+        back: { x: 0, opacity: 1, scale: 1, rotation: 0 }
+    },
+    // 4. Tilt away
+    {
+        out: { y: -15, opacity: 0, scale: 0.9, rotation: -8 },
+        in:  { y: 15, rotation: 8 },
+        back: { y: 0, opacity: 1, scale: 1, rotation: 0 }
+    }
+];
+
+// Cycle quotes every 3s with randomized transitions
 setInterval(() => {
+    const t = transitions[Math.floor(Math.random() * transitions.length)];
+    
     gsap.to(dynamicQuoteEl, {
-        y: -20,
-        opacity: 0,
-        duration: 0.4,
+        ...t.out,
+        duration: 0.35,
         ease: "power2.in",
         onComplete: () => {
             currentQuoteIdx = (currentQuoteIdx + 1) % quotes.length;
             dynamicQuoteEl.textContent = quotes[currentQuoteIdx];
             
-            gsap.set(dynamicQuoteEl, { y: 20 });
+            gsap.set(dynamicQuoteEl, t.in);
             
             gsap.to(dynamicQuoteEl, {
-                y: 0,
-                opacity: 1,
-                duration: 0.4,
-                ease: "power2.out"
+                ...t.back,
+                duration: 0.45,
+                ease: "back.out(1.4)"
             });
         }
     });
-}, 3500);
+}, 3000);
 
 // Form Transition Logic (Login <-> Signup)
 const formsWrapper = document.querySelector('.forms-wrapper');

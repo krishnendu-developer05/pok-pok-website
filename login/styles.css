@@ -1,21 +1,21 @@
 /* Premium 10YO UI/UX Colorful & Animative Theme */
 :root {
-    /* Vibrant Light Mode */
-    --bg-color: #f8f9fa;
-    --text-color: #101820;
-    --card-bg: rgba(255, 255, 255, 0.45);
-    --border-color: rgba(255, 255, 255, 0.8);
-    --shadow-color: rgba(0, 0, 0, 0.08);
+    /* Beautiful Light Mode — warm, rich, readable */
+    --bg-color: #faf8f5;
+    --text-color: #1a1a2e;
+    --card-bg: rgba(255, 255, 255, 0.72);
+    --border-color: rgba(0, 0, 0, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.1);
     
-    --blob-1: #FF9A9E; /* Pink */
-    --blob-2: #FECFEF; /* Soft Purple */
-    --blob-3: #A1C4FD; /* Blue */
-    --blob-4: #C2E9FB; /* Cyan */
+    --blob-1: #FF6B9D; /* Warm Rose */
+    --blob-2: #C084FC; /* Rich Lavender */
+    --blob-3: #60A5FA; /* Vivid Blue */
+    --blob-4: #34D399; /* Emerald */
     
-    --accent-pink: #FF3366;
-    --accent-cyan: #00C4FF;
-    --accent-purple: #8A2BE2;
-    --accent-yellow: #FFB300;
+    --accent-pink: #E11D74;
+    --accent-cyan: #0891B2;
+    --accent-purple: #7C3AED;
+    --accent-yellow: #D97706;
 }
 
 [data-theme="dark"] {
@@ -81,7 +81,7 @@ body {
 
 [data-theme="light"] .blob {
     mix-blend-mode: multiply;
-    opacity: 0.8;
+    opacity: 0.55;
 }
 
 .blob-1 { width: 50vw; height: 50vw; background: var(--blob-1); top: -20%; left: -10%; }
@@ -205,20 +205,21 @@ body {
     z-index: 10;
 }
 
-/* Floating Shapes */
+/* Floating Shapes - decorative, always behind text */
 .floating-shape {
     position: absolute;
-    opacity: 0.8; 
-    z-index: 5;
+    opacity: 0.35; 
+    z-index: 1;
+    pointer-events: none;
     color: var(--text-color);
     filter: drop-shadow(0 5px 15px var(--shadow-color));
 }
-.floating-shape i { width: 40px; height: 40px; }
+.floating-shape i { width: 36px; height: 36px; }
 
-.shape-1 { top: 15%; left: 15%; color: var(--accent-pink); }
-.shape-2 { top: 70%; left: 10%; color: var(--accent-cyan); }
-.shape-3 { top: 20%; right: 15%; color: var(--accent-yellow); }
-.shape-4 { top: 60%; right: 18%; color: var(--accent-purple); }
+.shape-1 { top: 8%; left: 5%; color: var(--accent-pink); }
+.shape-2 { top: 80%; left: 5%; color: var(--accent-cyan); }
+.shape-3 { top: 8%; right: 5%; color: var(--accent-yellow); }
+.shape-4 { top: 80%; right: 5%; color: var(--accent-purple); }
 
 /* Glassmorphism Cards */
 .glass-card {
@@ -658,6 +659,96 @@ body {
     60% { transform: translate(-50%, -7px); }
 }
 
+/* ===== Light Mode Polish (dark mode untouched) ===== */
+[data-theme="light"] .glass-card {
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .input-group input {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .input-group input:focus {
+    background: #ffffff;
+    border-color: var(--accent-purple);
+    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.2);
+}
+
+[data-theme="light"] .input-group input::placeholder {
+    color: #64748b;
+    opacity: 0.7;
+}
+
+[data-theme="light"] .login-btn {
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.25);
+}
+
+[data-theme="light"] .login-btn:hover {
+    box-shadow: 0 15px 35px rgba(124, 58, 237, 0.35);
+}
+
+[data-theme="light"] .card-header h2 {
+    background: linear-gradient(135deg, #1a1a2e, var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .title {
+    filter: drop-shadow(0px 4px 12px rgba(124, 58, 237, 0.25));
+}
+
+[data-theme="light"] .subtitle {
+    color: #334155;
+}
+
+[data-theme="light"] .theme-toggle {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .sil-icon {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .members-banner:hover .sil-icon {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="light"] .members-badge {
+    background: rgba(124, 58, 237, 0.1);
+    border-color: var(--accent-purple);
+    color: var(--accent-purple);
+}
+
+[data-theme="light"] .event-icon-wrapper {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .checkbox-container {
+    color: #334155;
+}
+
+[data-theme="light"] .text-link-btn {
+    color: #475569;
+}
+
+[data-theme="light"] .text-link-btn:hover {
+    color: var(--accent-purple);
+}
+
+[data-theme="light"] .scroll-indicator {
+    color: #475569;
+}
+
+[data-theme="light"] .footer-quote {
+    color: #64748b;
+}
+
 /* Responsive - Mobile First Mindset */
 @media (max-width: 900px) {
     .hero-container {
@@ -671,6 +762,15 @@ body {
     }
     
     .hidden-mobile { display: none; }
+    
+    /* Hide floating shapes on mobile to prevent overlap */
+    .floating-shape {
+        display: none;
+    }
+
+    .quote-container {
+        padding: 0 0.5rem;
+    }
     
     .login-panel {
         padding: 1rem 1.5rem 6rem;
