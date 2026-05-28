@@ -521,8 +521,16 @@
         if (Math.abs(d) > 50) { d > 0 ? next() : prev(); }
     }, { passive: true });
 
+    // Auto-cycle every 3.5 seconds
+    setInterval(next, 3500);
+
     // Init
     window.addEventListener('DOMContentLoaded', () => {
+        if (window.location.search.includes('embed=true') || window.self !== window.top) {
+            const topBar = document.querySelector('.top-bar');
+            if (topBar) topBar.style.display = 'none';
+        }
+
         updateSlides();
         updateProgress();
         const m = MEMBERS[0];

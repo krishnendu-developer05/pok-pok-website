@@ -231,25 +231,25 @@ const transitions = [
     // 1. Slide up
     {
         out: { y: -25, opacity: 0, scale: 1, rotation: 0 },
-        in:  { y: 25 },
+        in: { y: 25 },
         back: { y: 0, opacity: 1, scale: 1, rotation: 0 }
     },
     // 2. Scale pop
     {
         out: { y: 0, opacity: 0, scale: 0.5, rotation: 0 },
-        in:  { y: 0, scale: 1.3 },
+        in: { y: 0, scale: 1.3 },
         back: { y: 0, opacity: 1, scale: 1, rotation: 0 }
     },
     // 3. Slide right
     {
         out: { x: -40, opacity: 0, scale: 1, rotation: 0 },
-        in:  { x: 40 },
+        in: { x: 40 },
         back: { x: 0, opacity: 1, scale: 1, rotation: 0 }
     },
     // 4. Tilt away
     {
         out: { y: -15, opacity: 0, scale: 0.9, rotation: -8 },
-        in:  { y: 15, rotation: 8 },
+        in: { y: 15, rotation: 8 },
         back: { y: 0, opacity: 1, scale: 1, rotation: 0 }
     }
 ];
@@ -257,7 +257,7 @@ const transitions = [
 // Cycle quotes every 3s with randomized transitions
 setInterval(() => {
     const t = transitions[Math.floor(Math.random() * transitions.length)];
-    
+
     gsap.to(dynamicQuoteEl, {
         ...t.out,
         duration: 0.35,
@@ -352,21 +352,3 @@ const handleFormSubmit = (formId, btnId) => {
 
 handleFormSubmit('login-form', 'login-btn');
 handleFormSubmit('signup-form', 'signup-btn');
-
-// Core Members — Navigate to Culprits Page
-const meetCulpritsBtn = document.getElementById('meet-culprits-btn');
-
-if (meetCulpritsBtn) {
-    meetCulpritsBtn.addEventListener('click', () => {
-        // Smooth exit animation before navigating
-        gsap.to('body', {
-            opacity: 0,
-            scale: 0.95,
-            duration: 0.6,
-            ease: "power2.inOut",
-            onComplete: () => {
-                window.location.href = '../culprits/culprits.html';
-            }
-        });
-    });
-}
