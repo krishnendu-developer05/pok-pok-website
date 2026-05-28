@@ -3,499 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Meet the Culprits | Chaos Pokers</title>
+    <title>Meet the Culprits | Management Team</title>
     <link rel="stylesheet" href="../login/styles.css">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
-        /* Specific styles for the culprits page */
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap');
+        * { font-family: 'Outfit', sans-serif; }
+
         body {
-            overflow-x: hidden;
-            overflow-y: auto;
-            display: block;
-            min-height: 100vh;
-            min-height: 100dvh;
-            padding: 6rem 1.5rem 2rem;
+            overflow: hidden;
+            height: 100vh; height: 100dvh;
+            padding: 0; margin: 0;
+            user-select: none;
         }
+
+        /* ── Top Bar ── */
+        .top-bar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.2rem 2.5rem;
+            pointer-events: none;
+        }
+        .top-bar > * { pointer-events: auto; }
+
         .back-btn {
-            position: fixed;
-            top: 2rem;
-            left: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.8rem 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.6rem 1.4rem;
+            background: rgba(255,255,255,0.06);
             border: 1px solid var(--border-color);
             border-radius: 30px;
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: bold;
-            font-style: italic;
-            backdrop-filter: blur(10px);
-            transition: all 0.4s ease;
-            z-index: 100;
-            -webkit-tap-highlight-color: transparent;
+            color: var(--text-color); text-decoration: none;
+            font-weight: 700; font-size: 0.9rem;
+            backdrop-filter: blur(12px);
+            transition: all 0.35s ease;
         }
         .back-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateX(-5px);
+            background: rgba(255,255,255,0.12);
             border-color: var(--accent-cyan);
-            box-shadow: 0 5px 15px rgba(8, 145, 178, 0.3);
+            box-shadow: 0 4px 20px rgba(0,240,255,0.25);
+            transform: translateX(-3px);
         }
-        .doodle-layer {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            overflow: hidden;
-        }
-        .touch-orb {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 9;
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0;
-            background:
-                radial-gradient(circle, rgba(0, 240, 255, 0.34) 0%, rgba(255, 0, 85, 0.2) 34%, transparent 68%);
-            filter: blur(8px);
-            mix-blend-mode: screen;
-            transform: translate3d(-50%, -50%, 0) scale(0.7);
-            transition: opacity 0.25s ease, transform 0.25s ease;
-        }
-        .touch-orb.is-active {
-            opacity: 0.9;
-            transform: translate3d(-50%, -50%, 0) scale(1);
-        }
-        .doodle {
-            position: absolute;
-            width: clamp(38px, 5vw, 72px);
-            height: clamp(38px, 5vw, 72px);
-            color: rgba(255, 255, 255, 0.16);
-            filter: drop-shadow(0 0 14px rgba(0, 240, 255, 0.2));
-            stroke-width: 1.4;
-            animation: doodleFloat 7s ease-in-out infinite;
-        }
-        .doodle-pink {
-            color: rgba(255, 0, 85, 0.22);
-        }
-        .doodle-cyan {
-            color: rgba(0, 240, 255, 0.2);
-        }
-        .doodle-purple {
-            color: rgba(112, 0, 255, 0.24);
-        }
-        .doodle-yellow {
-            color: rgba(255, 234, 0, 0.18);
-        }
-        .doodle-1 { top: 10%; left: 8%; transform: rotate(-12deg); animation-delay: 0s; }
-        .doodle-2 { top: 18%; right: 10%; transform: rotate(14deg); animation-delay: 0.8s; }
-        .doodle-3 { top: 42%; left: 4%; transform: rotate(9deg); animation-delay: 1.6s; }
-        .doodle-4 { top: 54%; right: 5%; transform: rotate(-10deg); animation-delay: 2.4s; }
-        .doodle-5 { top: 80%; left: 12%; transform: rotate(18deg); animation-delay: 3.2s; }
-        .doodle-6 { top: 86%; right: 12%; transform: rotate(-16deg); animation-delay: 4s; }
-        .doodle-7 { top: 30%; left: 18%; transform: rotate(-8deg); animation-delay: 1.1s; }
-        .doodle-8 { top: 70%; right: 19%; transform: rotate(11deg); animation-delay: 2.1s; }
+        .back-btn i { width: 16px; height: 16px; }
 
-        @keyframes doodleFloat {
-            0%, 100% {
-                translate: 0 0;
-                opacity: 0.65;
-            }
-            50% {
-                translate: 0 -18px;
-                opacity: 1;
-            }
-        }
-        .grand-reveal-container {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            max-width: 620px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4rem;
-        }
-        .member-reveal-panel {
-            width: 100%;
-            min-height: calc(100dvh - 8rem);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            perspective: 1200px;
-        }
-        .core-member-card {
-            transform-style: preserve-3d;
-            width: 100%;
-            max-width: 450px;
-            padding: 3.5rem 2.5rem;
-            background: rgba(20, 20, 30, 0.65);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 30px;
-            background:
-                radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 20%), rgba(0, 240, 255, 0.13), transparent 34%),
-                radial-gradient(circle at 18% 12%, rgba(255, 0, 85, 0.18), transparent 36%),
-                radial-gradient(circle at 90% 86%, rgba(112, 0, 255, 0.16), transparent 34%),
-                linear-gradient(145deg, rgba(24, 24, 38, 0.9), rgba(4, 10, 18, 0.82));
-            box-shadow:
-                0 30px 80px rgba(0, 0, 0, 0.5),
-                0 0 55px rgba(0, 240, 255, 0.08),
-                inset 0 1px 0 rgba(255,255,255,0.14),
-                inset 0 -1px 0 rgba(255,255,255,0.05);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0;
-            opacity: 0; /* For GSAP */
-            will-change: transform;
-            touch-action: pan-y;
-            isolation: isolate;
-        }
-        .core-member-card::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: conic-gradient(from var(--border-spin, 0deg), var(--accent-pink), var(--accent-purple), var(--accent-cyan), var(--accent-pink));
-            z-index: -1;
-            border-radius: 32px;
-            opacity: 0.62;
-            animation: borderGlow 4s ease infinite, borderSpin 10s linear infinite;
-        }
-        .core-member-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            background:
-                radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 20%), rgba(255,255,255,0.22), transparent 35%),
-                linear-gradient(135deg, rgba(255,255,255,0.12), transparent 32%, rgba(0, 240, 255, 0.06) 62%, transparent 82%);
-            opacity: var(--glow-opacity, 0);
-            pointer-events: none;
-            transition: opacity 0.25s ease;
-            transform: translateZ(1px);
-        }
-        .core-member-card.is-touching {
-            box-shadow:
-                0 34px 86px rgba(0, 0, 0, 0.58),
-                0 0 42px rgba(0, 240, 255, 0.16),
-                0 0 60px rgba(255, 0, 85, 0.08),
-                inset 0 1px 0 rgba(255,255,255,0.16);
-        }
-        @keyframes borderGlow {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.8; }
-        }
-        @keyframes borderSpin {
-            to { --border-spin: 360deg; }
-        }
-        @property --border-spin {
-            syntax: "<angle>";
-            inherits: false;
-            initial-value: 0deg;
-        }
-        .member-image-wrapper {
-            position: relative;
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            padding: 10px;
+        .page-title {
+            font-size: clamp(1rem, 2.5vw, 1.6rem);
+            font-weight: 800; letter-spacing: 6px; text-transform: uppercase;
             background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
-            box-shadow: 0 15px 45px rgba(0,0,0,0.4);
-            animation: gradientShift 4s ease infinite;
             background-size: 200% 200%;
-            margin-bottom: 2rem;
-            transform: translateZ(55px);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: gradientShift 5s ease infinite;
         }
-        .member-image-wrapper::before,
-        .member-image-wrapper::after {
-            content: '';
-            position: absolute;
-            inset: -9px;
-            border-radius: 50%;
-            border: 1px solid rgba(0, 240, 255, 0.24);
-            opacity: 0.78;
-            transform: translateZ(-1px);
-        }
-        .member-image-wrapper::after {
-            inset: 8px;
-            border-color: rgba(255, 0, 85, 0.22);
-            box-shadow: inset 0 0 24px rgba(255, 0, 85, 0.12);
-        }
-        .member-image {
+
+        /* ── Showcase ── */
+        .showcase {
             position: relative;
-            z-index: 1;
-            width: 100%;
-            height: 100%;
+            width: 100vw; height: 100vh; height: 100dvh;
+            z-index: 10; overflow: hidden;
+        }
+
+        /* ── Diagonal Accent ── */
+        .diagonal-accent {
+            position: absolute; top: 0; right: 18%; width: 30%; height: 100%;
+            background: linear-gradient(160deg, var(--accent-purple) 0%, var(--accent-cyan) 100%);
+            opacity: 0.1; transform: skewX(-12deg);
+            pointer-events: none; z-index: 1;
+        }
+
+        /* ── Photos Area ── */
+        .photos-area {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 5; pointer-events: none;
+        }
+
+        .member-slide {
+            position: absolute; top: 45%;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 1.4s cubic-bezier(0.19, 1, 0.22, 1);
+            will-change: transform, opacity, filter;
+            cursor: pointer;
+            pointer-events: auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+
+        .member-slide .member-photo {
+            display: block;
+            width: 100%; height: 100%;
             object-fit: cover;
-            border-radius: 50%;
-            border: 4px solid var(--bg-color);
+            object-position: center;
+            transition: filter 1.4s cubic-bezier(0.19, 1, 0.22, 1);
         }
-        .ritam-image {
-            object-position: center top;
+
+        /* ── Slide positions ── */
+        .member-slide[data-pos="active"] {
+            z-index: 10;
+            left: 50%; transform: translate(-50%, -50%) scale(1);
+            width: 340px; height: 480px;
+            opacity: 1; filter: brightness(1);
         }
-        .member-name {
-            font-size: 2.5rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 0.5rem;
-            text-align: center;
-            max-width: 100%;
-            overflow-wrap: break-word;
-            background: linear-gradient(135deg, #ffffff, var(--accent-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(8, 145, 178, 0.3);
-            transform: translateZ(40px);
+        .member-slide[data-pos="prev"] {
+            z-index: 5;
+            left: 18%; transform: translate(-50%, -50%) scale(0.75);
+            width: 340px; height: 480px;
+            opacity: 0.55; filter: brightness(0.5) saturate(0.5);
         }
-        .member-role {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--accent-pink);
-            letter-spacing: 4px;
-            margin-bottom: 2rem;
-            text-transform: uppercase;
-            text-align: center;
-            line-height: 1.35;
-            max-width: 100%;
-            overflow-wrap: break-word;
-            transform: translateZ(34px);
+        .member-slide[data-pos="next"] {
+            z-index: 5;
+            left: 82%; transform: translate(-50%, -50%) scale(0.75);
+            width: 340px; height: 480px;
+            opacity: 0.55; filter: brightness(0.5) saturate(0.5);
         }
-        .member-socials {
-            display: flex;
-            gap: 1rem;
-            transform: translateZ(28px);
+        .member-slide[data-pos="prev2"], .member-slide[data-pos="next2"], .member-slide[data-pos="hidden"] {
+            z-index: 0;
+            left: 50%; transform: translate(-50%, -50%) scale(0.3);
+            width: 340px; height: 480px;
+            opacity: 0; pointer-events: none;
+        }
+
+        /* ── Bottom Info Strip — bottom 35% ── */
+        .bottom-strip {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            height: 35%;
+            display: flex; align-items: flex-start; justify-content: space-between;
+            padding: 1.5rem 3.5rem 2.5rem;
+            z-index: 20;
+            pointer-events: none;
+            background: linear-gradient(to top, rgba(5,5,10,0.85) 0%, rgba(5,5,10,0.4) 60%, transparent 100%);
+        }
+        .bottom-strip > * { pointer-events: auto; }
+
+        /* Left: Role + Name + Counter */
+        .info-left {
+            display: flex; flex-direction: column; gap: 0.4rem;
+            max-width: 320px;
+        }
+        .member-role-label {
+            font-size: 0.8rem; font-weight: 700;
+            letter-spacing: 5px; text-transform: uppercase;
+            color: var(--accent-cyan);
+        }
+        .member-name-label {
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+            font-weight: 900; letter-spacing: 2px;
+            text-transform: uppercase; color: #fff; line-height: 1.1;
+        }
+        .member-counter {
+            display: flex; align-items: baseline; gap: 0.3rem;
+            margin-top: 0.4rem;
+        }
+        .counter-current { font-size: 1.6rem; font-weight: 800; color: var(--accent-cyan); }
+        .counter-sep { font-size: 0.9rem; color: rgba(255,255,255,0.35); margin: 0 0.1rem; }
+        .counter-total { font-size: 0.9rem; color: rgba(255,255,255,0.35); }
+
+        /* Center: Bio */
+        .info-center {
+            position: absolute;
+            top: calc(45% + 255px);
+            left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: flex-start;
+            width: 340px; /* Matches active image width */
+            z-index: 20;
+        }
+        .member-bio-text {
+            font-size: 1.15rem; font-weight: 400;
+            color: rgba(255,255,255,0.85); line-height: 1.6;
+            font-style: italic; text-align: left;
+            font-family: "Times New Roman", Times, serif;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .member-bio-text::before { content: '"'; }
+        .member-bio-text::after { content: '"'; }
+        .socials-bar {
+            display: flex; gap: 1rem;
         }
         .social-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-color);
-            text-decoration: none;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 40px; height: 40px; border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.6); text-decoration: none;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .social-btn:hover {
-            background: rgba(255,255,255,0.15);
-            border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
-            transform: translateY(-3px) scale(1.1);
-            box-shadow: 0 5px 15px rgba(8, 145, 178, 0.3);
+            background: rgba(0,240,255,0.15);
+            border-color: var(--accent-cyan); color: var(--accent-cyan);
+            transform: translateY(-3px) scale(1.12);
+            box-shadow: 0 6px 20px rgba(0,240,255,0.3);
         }
-        .social-btn i {
-            width: 20px;
-            height: 20px;
+        .social-btn i { width: 18px; height: 18px; }
+
+        /* Right: spacer for nav arrow */
+        .info-right { width: 60px; }
+
+        /* ── Nav Arrows ── */
+        .nav-arrow {
+            position: absolute; top: 45%; transform: translateY(-50%);
+            z-index: 30; width: 50px; height: 50px; border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.15);
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.7); cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .member-divider {
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent-pink), var(--accent-cyan));
-            border-radius: 3px;
-            margin-bottom: 1.5rem;
-            transform: translateZ(32px);
+        .nav-arrow:hover {
+            background: rgba(0,240,255,0.12);
+            border-color: var(--accent-cyan); color: var(--accent-cyan);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 25px rgba(0,240,255,0.3);
         }
-        .member-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transform-style: preserve-3d;
+        .nav-arrow i { width: 22px; height: 22px; }
+        .nav-prev { left: 1.5rem; }
+        .nav-next { right: 1.5rem; }
+
+        /* ── Progress dots ── */
+        .progress-track {
+            position: absolute; bottom: 0.8rem; left: 50%;
+            transform: translateX(-50%);
+            display: flex; gap: 6px; z-index: 25;
         }
-
-        @media (max-width: 640px) {
-            body {
-                align-items: flex-start;
-                padding: 5.25rem 1rem 1.25rem;
-            }
-
-            .blob-container {
-                filter: blur(70px);
-                -webkit-filter: blur(70px);
-            }
-
-            .blob {
-                opacity: 0.42;
-            }
-
-            .doodle {
-                width: 36px;
-                height: 36px;
-                opacity: 0.72;
-                filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.16));
-            }
-
-            .doodle-3,
-            .doodle-7,
-            .doodle-8 {
-                display: none;
-            }
-
-            .doodle-1 { top: 13%; left: -0.25rem; }
-            .doodle-2 { top: 22%; right: -0.25rem; }
-            .doodle-4 { top: 54%; right: -0.4rem; }
-            .doodle-5 { top: 77%; left: -0.1rem; }
-            .doodle-6 { top: 92%; right: 1rem; }
-
-            .touch-orb {
-                width: 110px;
-                height: 110px;
-                filter: blur(7px);
-            }
-
-            .back-btn {
-                top: 1rem;
-                left: 1rem;
-                right: 1rem;
-                transform: none;
-                width: min(13.5rem, calc(100vw - 2rem));
-                margin: 0 auto;
-                justify-content: center;
-                padding: 0.7rem 1rem;
-                font-size: 0.98rem;
-                border-radius: 999px;
-            }
-
-            .back-btn:hover {
-                transform: translateY(-2px);
-            }
-
-            .grand-reveal-container {
-                gap: 2.5rem;
-            }
-
-            .member-reveal-panel {
-                min-height: calc(100dvh - 6.5rem);
-                align-items: center;
-            }
-
-            .core-member-card {
-                max-width: 23rem;
-                min-height: auto;
-                padding: 1.6rem 1.15rem 1.35rem;
-                border-radius: 24px;
-                box-shadow:
-                    0 18px 48px rgba(0, 0, 0, 0.42),
-                    0 0 32px rgba(0, 240, 255, 0.08),
-                    inset 0 1px 0 rgba(255,255,255,0.13);
-            }
-
-            .core-member-card::before {
-                border-radius: 26px;
-                opacity: 0.42;
-            }
-
-            .member-image-wrapper {
-                width: clamp(150px, 47vw, 188px);
-                height: clamp(150px, 47vw, 188px);
-                padding: 7px;
-                margin-bottom: 1.25rem;
-                transform: translateZ(34px);
-            }
-
-            .member-image {
-                border-width: 3px;
-            }
-
-            .member-name {
-                font-size: clamp(1.65rem, 8vw, 2.15rem);
-                line-height: 1.08;
-                letter-spacing: 1px;
-                margin-bottom: 0.45rem;
-                transform: translateZ(26px);
-            }
-
-            .member-role {
-                font-size: 0.95rem;
-                letter-spacing: 2px;
-                margin-bottom: 1.1rem;
-                transform: translateZ(22px);
-            }
-
-            .member-divider {
-                width: 52px;
-                height: 2px;
-                margin-bottom: 1.05rem;
-                transform: translateZ(20px);
-            }
-
-            .member-socials {
-                gap: 0.75rem;
-                transform: translateZ(18px);
-            }
-
-            .social-btn {
-                width: 40px;
-                height: 40px;
-            }
-
-            .social-btn i {
-                width: 18px;
-                height: 18px;
-            }
+        .progress-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.4s ease; cursor: pointer;
+        }
+        .progress-dot.active {
+            width: 28px; border-radius: 3px;
+            background: var(--accent-cyan);
+            box-shadow: 0 0 12px rgba(0,240,255,0.6);
         }
 
-        @media (max-width: 380px), (max-height: 700px) {
-            body {
-                padding-top: 4.75rem;
-            }
+        /* ── Particles ── */
+        .particle {
+            position: absolute; width: 3px; height: 3px; border-radius: 50%;
+            background: var(--accent-cyan); opacity: 0;
+            pointer-events: none; z-index: 3;
+        }
 
-            .back-btn {
-                top: 0.75rem;
-                padding: 0.62rem 0.9rem;
-            }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
 
-            .core-member-card {
-                max-width: 21rem;
-                padding: 1.3rem 1rem 1.15rem;
-            }
+        /* ═══════ Responsive ═══════ */
 
-            .member-image-wrapper {
-                width: clamp(132px, 43vw, 164px);
-                height: clamp(132px, 43vw, 164px);
-                margin-bottom: 1rem;
-            }
+        @media (max-width: 1024px) {
+            .member-slide[data-pos="active"] { width: 300px; height: 420px; }
+            .member-slide[data-pos="prev"], .member-slide[data-pos="next"] { width: 300px; height: 420px; transform: translate(-50%, -50%) scale(0.65); }
+            .info-center { width: 300px; top: calc(45% + 225px); }
+            .bottom-strip { padding: 1.2rem 2rem 2rem; height: 35%; }
+            .member-name-label { font-size: 1.6rem; }
+        }
 
-            .member-name {
-                font-size: clamp(1.45rem, 7.4vw, 1.85rem);
-            }
+        @media (max-width: 768px) {
+            .top-bar { padding: 0.8rem 1rem; }
+            .back-btn { padding: 0.45rem 0.9rem; font-size: 0.78rem; }
 
-            .member-role {
-                font-size: 0.86rem;
-                letter-spacing: 1.5px;
-                margin-bottom: 0.85rem;
-            }
+            .member-slide { top: 40%; }
+            .member-slide[data-pos="active"] { width: 260px; height: 380px; }
+            .member-slide[data-pos="prev"] { left: 5%; transform: translate(0, -50%) scale(0.6); }
+            .member-slide[data-pos="next"] { left: 95%; transform: translate(-100%, -50%) scale(0.6); }
+            .info-center { width: 260px; top: calc(40% + 205px); align-items: center; }
 
-            .member-divider {
-                margin-bottom: 0.85rem;
+            .bottom-strip {
+                flex-direction: column; align-items: center;
+                text-align: center; padding: 1rem 1.5rem 2rem;
+                height: 42%; gap: 0.6rem;
             }
+            .info-left { align-items: center; max-width: 100%; }
+            .info-center { max-width: 90%; width: auto; }
+            .member-bio-text { font-size: 0.8rem; text-align: center; }
+
+            .member-name-label { font-size: 1.4rem; }
+            .member-role-label { font-size: 0.7rem; letter-spacing: 3px; }
+            .member-bio-text { font-size: 0.8rem; }
+
+            .nav-prev { left: 0.5rem; }
+            .nav-next { right: 0.5rem; }
+            .nav-arrow { width: 40px; height: 40px; }
+
+            .social-btn { width: 36px; height: 36px; }
+            .socials-bar { gap: 0.7rem; }
+        }
+
+        @media (max-width: 480px) {
+            .photos-area { height: 45%; top: 4rem; }
+            .member-slide[data-pos="active"] { width: 200px; }
+            .member-slide[data-pos="prev"] { width: 120px; transform: scale(0.5); opacity: 0.35; }
+            .member-slide[data-pos="next"] { width: 120px; transform: scale(0.5); opacity: 0.35; }
+            .bottom-strip { height: 48%; padding: 0.8rem 1rem 1.5rem; }
+            .member-name-label { font-size: 1.2rem; letter-spacing: 1px; }
+            .counter-current { font-size: 1.2rem; }
+            .member-bio-text { font-size: 0.75rem; }
+            .nav-arrow { width: 34px; height: 34px; }
+            .nav-arrow i { width: 18px; height: 18px; }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .touch-orb,
-            .doodle,
-            .core-member-card,
-            .member-image-wrapper,
-            .social-btn {
-                transition-duration: 0.01ms;
-                animation-duration: 0.01ms;
-            }
+            .member-slide { transition-duration: 0.01ms !important; }
         }
     </style>
 </head>
 <body data-theme="dark">
-    <!-- Animated Blobs Background -->
+    <!-- Background -->
     <div class="blob-container">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
@@ -503,419 +315,230 @@
         <div class="blob blob-4"></div>
     </div>
     <div class="bg-noise"></div>
-    <div class="touch-orb" id="touch-orb" aria-hidden="true"></div>
 
-    <div class="doodle-layer" aria-hidden="true">
-        <i data-lucide="sparkles" class="doodle doodle-1 doodle-cyan"></i>
-        <i data-lucide="code-2" class="doodle doodle-2 doodle-pink"></i>
-        <i data-lucide="gamepad-2" class="doodle doodle-3 doodle-purple"></i>
-        <i data-lucide="coffee" class="doodle doodle-4 doodle-yellow"></i>
-        <i data-lucide="trophy" class="doodle doodle-5 doodle-cyan"></i>
-        <i data-lucide="palette" class="doodle doodle-6 doodle-pink"></i>
-        <i data-lucide="dice-5" class="doodle doodle-7 doodle-yellow"></i>
-        <i data-lucide="zap" class="doodle doodle-8 doodle-purple"></i>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <a href="../login/index.html" class="back-btn"><i data-lucide="chevron-left"></i> Back</a>
+        <div style="width:80px"></div>
     </div>
 
-    <a href="../login/index.html" class="back-btn">
-        <i data-lucide="arrow-left"></i>
-        Back to Hub
-    </a>
+    <!-- Showcase -->
+    <div class="showcase" id="showcase">
+        <div class="diagonal-accent"></div>
 
-    <div class="grand-reveal-container">
-        <section class="member-reveal-panel">
-            <div class="core-member-card">
-                <div class="member-image-wrapper">
-                    <img src="./krishnendu.jpg" alt="Krishnendu Roy" class="member-image" onerror="this.src='https://via.placeholder.com/300x400/2a2a35/ffffff?text=Image+Missing';">
-                </div>
-                <div class="member-info">
-                    <h4 class="member-name">KRISHNENDU ROY</h4>
-                    <p class="member-role">SECRETARY</p>
-                    <div class="member-divider"></div>
-                    <div class="member-socials">
-                        <a href="#" class="social-btn"><i data-lucide="github"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="linkedin"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="instagram"></i></a>
-                    </div>
+        <!-- Particles -->
+        <div class="particle" style="top:12%;left:8%"></div>
+        <div class="particle" style="top:25%;left:88%"></div>
+        <div class="particle" style="top:55%;left:4%"></div>
+        <div class="particle" style="top:70%;left:92%"></div>
+        <div class="particle" style="top:18%;left:52%"></div>
+        <div class="particle" style="top:78%;left:42%"></div>
+
+        <!-- Photos Area (top portion) -->
+        <div class="photos-area" id="photosArea"></div>
+
+        <!-- Center: Bio -->
+        <div class="info-center">
+            <div class="member-bio-text" id="bioText"></div>
+        </div>
+
+        <!-- Bottom Info Strip (bottom portion — no overlap) -->
+        <div class="bottom-strip">
+            <!-- Left: Name + Role + Counter -->
+            <div class="info-left">
+                <div class="member-role-label" id="roleLabel"></div>
+                <div class="member-name-label" id="nameLabel"></div>
+                <div class="member-counter">
+                    <span class="counter-current" id="counterCurrent">01</span>
+                    <span class="counter-sep">/</span>
+                    <span class="counter-total" id="counterTotal">11</span>
                 </div>
             </div>
-        </section>
 
-        <section class="member-reveal-panel">
-            <div class="core-member-card">
-                <div class="member-image-wrapper">
-                    <img src="./sohom.jpeg" alt="Soham Sarkar" class="member-image" onerror="this.src='https://via.placeholder.com/300x400/2a2a35/ffffff?text=Image+Missing';">
-                </div>
-                <div class="member-info">
-                    <h4 class="member-name">SOHAM SARKAR</h4>
-                    <p class="member-role">CO SECRETARY</p>
-                    <div class="member-divider"></div>
-                    <div class="member-socials">
-                        <a href="#" class="social-btn"><i data-lucide="github"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="linkedin"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </section>
+            <!-- Right spacer -->
+            <div class="info-right"></div>
+        </div>
 
-        <section class="member-reveal-panel">
-            <div class="core-member-card">
-                <div class="member-image-wrapper">
-                    <img src="./SAMIM.jpeg" alt="Samim Tarafdar" class="member-image" onerror="this.src='https://via.placeholder.com/300x400/2a2a35/ffffff?text=Image+Missing';">
-                </div>
-                <div class="member-info">
-                    <h4 class="member-name">SAMIM TARAFDAR</h4>
-                    <p class="member-role">TREASURER</p>
-                    <div class="member-divider"></div>
-                    <div class="member-socials">
-                        <a href="#" class="social-btn"><i data-lucide="github"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="linkedin"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- Nav Arrows -->
+        <button class="nav-arrow nav-prev" id="navPrev"><i data-lucide="chevron-left"></i></button>
+        <button class="nav-arrow nav-next" id="navNext"><i data-lucide="chevron-right"></i></button>
 
-        <section class="member-reveal-panel">
-            <div class="core-member-card">
-                <div class="member-image-wrapper">
-                    <img src="./Ritam.jpeg" alt="Ritam Biswas" class="member-image ritam-image" onerror="this.src='https://via.placeholder.com/300x400/2a2a35/ffffff?text=Image+Missing';">
-                </div>
-                <div class="member-info">
-                    <h4 class="member-name">RITAM BISWAS</h4>
-                    <p class="member-role">GROUP COORDINATOR</p>
-                    <div class="member-divider"></div>
-                    <div class="member-socials">
-                        <a href="#" class="social-btn"><i data-lucide="github"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="linkedin"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="member-reveal-panel">
-            <div class="core-member-card">
-                <div class="member-image-wrapper">
-                    <img src="./ANKIT.jpeg" alt="Ankit Ghosh" class="member-image" onerror="this.src='https://via.placeholder.com/300x400/2a2a35/ffffff?text=Image+Missing';">
-                </div>
-                <div class="member-info">
-                    <h4 class="member-name">ANKIT GHOSH</h4>
-                    <p class="member-role">EVENT ORGANIZER</p>
-                    <div class="member-divider"></div>
-                    <div class="member-socials">
-                        <a href="#" class="social-btn"><i data-lucide="github"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="linkedin"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="member-reveal-panel">
-            <div class="core-member-card">
-                <div class="member-image-wrapper">
-                    <img src="./Baitanik.jpeg" alt="Baitanik Saha" class="member-image" onerror="this.src='https://via.placeholder.com/300x400/2a2a35/ffffff?text=Image+Missing';">
-                </div>
-                <div class="member-info">
-                    <h4 class="member-name">BAITANIK SAHA</h4>
-                    <p class="member-role">DESIGN LEAD</p>
-                    <div class="member-divider"></div>
-                    <div class="member-socials">
-                        <a href="#" class="social-btn"><i data-lucide="github"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="linkedin"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="member-reveal-panel">
-            <div class="core-member-card">
-                <div class="member-image-wrapper">
-                    <img src="./Navonil.jpeg" alt="Navonil Pal" class="member-image" onerror="this.src='https://via.placeholder.com/300x400/2a2a35/ffffff?text=Image+Missing';">
-                </div>
-                <div class="member-info">
-                    <h4 class="member-name">NAVONIL PAL</h4>
-                    <p class="member-role">TECH LEAD</p>
-                    <div class="member-divider"></div>
-                    <div class="member-socials">
-                        <a href="#" class="social-btn"><i data-lucide="github"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="linkedin"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="member-reveal-panel">
-            <div class="core-member-card">
-                <div class="member-image-wrapper">
-                    <img src="./SHUBHOJIT.jpeg" alt="Shubhojit Ghosh" class="member-image" onerror="this.src='https://via.placeholder.com/300x400/2a2a35/ffffff?text=Image+Missing';">
-                </div>
-                <div class="member-info">
-                    <h4 class="member-name">SHUBHOJIT GHOSH</h4>
-                    <p class="member-role">JUNIOR COORDINATOR</p>
-                    <div class="member-divider"></div>
-                    <div class="member-socials">
-                        <a href="#" class="social-btn"><i data-lucide="github"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="linkedin"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="member-reveal-panel">
-            <div class="core-member-card">
-                <div class="member-image-wrapper">
-                    <img src="./Aitri.jpeg" alt="Aitri Dasgupta" class="member-image" onerror="this.src='https://via.placeholder.com/300x400/2a2a35/ffffff?text=Image+Missing';">
-                </div>
-                <div class="member-info">
-                    <h4 class="member-name">AITRI DASGUPTA</h4>
-                    <p class="member-role">PR LEAD</p>
-                    <div class="member-divider"></div>
-                    <div class="member-socials">
-                        <a href="#" class="social-btn"><i data-lucide="github"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="linkedin"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="member-reveal-panel">
-            <div class="core-member-card">
-                <div class="member-image-wrapper">
-                    <img src="./SRINJINI.jpeg" alt="Srinjini Mitra" class="member-image" onerror="this.src='https://via.placeholder.com/300x400/2a2a35/ffffff?text=Image+Missing';">
-                </div>
-                <div class="member-info">
-                    <h4 class="member-name">SRINJINI MITRA</h4>
-                    <p class="member-role">GAME ORGANIZER</p>
-                    <div class="member-divider"></div>
-                    <div class="member-socials">
-                        <a href="#" class="social-btn"><i data-lucide="github"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="linkedin"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="member-reveal-panel">
-            <div class="core-member-card">
-                <div class="member-image-wrapper">
-                    <img src="./ARKAPRAVA.jpeg" alt="Arkaprava Choudhuri" class="member-image" onerror="this.src='https://via.placeholder.com/300x400/2a2a35/ffffff?text=Image+Missing';">
-                </div>
-                <div class="member-info">
-                    <h4 class="member-name">ARKAPRAVA CHOUDHURI</h4>
-                    <p class="member-role">GAME ASSOCIATE</p>
-                    <div class="member-divider"></div>
-                    <div class="member-socials">
-                        <a href="#" class="social-btn"><i data-lucide="github"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="linkedin"></i></a>
-                        <a href="#" class="social-btn"><i data-lucide="instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- Progress Dots -->
+        <div class="progress-track" id="progressTrack"></div>
     </div>
 
     <script>
-        lucide.createIcons();
+    const MEMBERS = [
+        { name: 'KRISHNENDU ROY', role: 'SECRETARY', img: './krishnendu.jpg', bio: 'The driving force behind every decision, Krishnendu leads with vision, strategy, and relentless energy.' },
+        { name: 'SOHAM SARKAR', role: 'CO SECRETARY', img: './sohom.jpeg', bio: 'The steady hand beside the helm — Soham ensures nothing falls through the cracks.' },
+        { name: 'SAMIM TARAFDAR', role: 'TREASURER', img: './SAMIM.jpeg', bio: 'Master of the books — Samim keeps the finances sharp and the team funded.' },
+        { name: 'RITAM BISWAS', role: 'GROUP COORDINATOR', img: './Ritam.jpeg', bio: 'The glue that binds the chaos — Ritam orchestrates every moving piece with precision.' },
+        { name: 'ANKIT GHOSH', role: 'EVENT ORGANIZER', img: './ANKIT.jpeg', bio: 'From concept to curtain call, Ankit turns every event into an unforgettable experience.' },
+        { name: 'BAITANIK SAHA', role: 'DESIGN LEAD', img: './Baitanik.jpeg', bio: 'Where pixels meet purpose — Baitanik crafts the visual identity that defines the team.' },
+        { name: 'NAVONIL PAL', role: 'TECH LEAD', img: './Navonil.jpeg', bio: 'The architect of innovation — Navonil turns ideas into reality with code and creativity.' },
+        { name: 'SHUBHOJIT GHOSH', role: 'JUNIOR COORDINATOR', img: './SHUBHOJIT.jpeg', bio: 'Rising through the ranks with dedication, Shubhojit keeps the coordination seamless.' },
+        { name: 'AITRI DASGUPTA', role: 'PR LEAD', img: './Aitri.jpeg', bio: 'The voice of the team — Aitri builds bridges and spreads the word with finesse.' },
+        { name: 'SRINJINI MITRA', role: 'GAME ORGANIZER', img: './SRINJINI.jpeg', bio: 'The mastermind behind every game night — Srinjini brings the fun to the frontlines.' },
+        { name: 'ARKAPRAVA CHOUDHURI', role: 'GAME ASSOCIATE', img: './ARKAPRAVA.jpeg', bio: 'The strategist in the shadows — Arkaprava co-pilots every gaming adventure.' }
+    ];
 
-        // Background Blobs animation
-        const blobs = document.querySelectorAll('.blob');
-        blobs.forEach((blob, i) => {
-            gsap.to(blob, {
-                x: () => gsap.utils.random(-300, 300),
-                y: () => gsap.utils.random(-300, 300),
-                scale: () => gsap.utils.random(0.8, 1.5),
-                duration: () => gsap.utils.random(8, 15),
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut",
-                delay: i * 0.5
-            });
+    let activeIdx = 0, isAnimating = false;
+    const TOTAL = MEMBERS.length;
+    const photosArea = document.getElementById('photosArea');
+
+    // Build slides
+    MEMBERS.forEach((m, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'member-slide';
+        slide.dataset.idx = i;
+        slide.dataset.pos = 'hidden';
+        slide.innerHTML = `<img src="${m.img}" alt="${m.name}" class="member-photo" draggable="false" onerror="this.src='https://via.placeholder.com/400x600/1a1a2e/ffffff?text=Image';">`;
+        slide.addEventListener('click', () => {
+            const idx = parseInt(slide.dataset.idx);
+            if (idx !== activeIdx) goTo(idx);
         });
+        photosArea.appendChild(slide);
+    });
 
-        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const touchOrb = document.getElementById('touch-orb');
-        let isPointerActive = false;
-        let activeTiltCard = null;
-        let orbHideTimer;
+    // Build progress dots
+    const progressTrack = document.getElementById('progressTrack');
+    MEMBERS.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'progress-dot';
+        dot.addEventListener('click', () => goTo(i));
+        progressTrack.appendChild(dot);
+    });
 
-        const moveTouchOrb = (event, forceActive = false) => {
-            if (reduceMotion || !touchOrb) return;
+    lucide.createIcons();
 
-            touchOrb.style.left = `${event.clientX}px`;
-            touchOrb.style.top = `${event.clientY}px`;
-            touchOrb.classList.toggle('is-active', forceActive || event.pointerType === 'touch');
-
-            clearTimeout(orbHideTimer);
-            if (event.pointerType !== 'touch' && !forceActive) {
-                orbHideTimer = setTimeout(() => touchOrb.classList.remove('is-active'), 650);
-            }
-        };
-
-        const hideTouchOrb = () => {
-            if (touchOrb) touchOrb.classList.remove('is-active');
-        };
-
-        const revealCard = (card, delay = 0) => {
-            const image = card.querySelector('.member-image-wrapper');
-            const details = card.querySelectorAll('.member-name, .member-role, .member-divider, .social-btn');
-
-            gsap.fromTo(card,
-                { opacity: 0, scale: 0.64, rotationY: 80, rotationX: 34, z: -320, y: 80 },
-                { opacity: 1, scale: 1, rotationY: 0, rotationX: 0, z: 0, y: 0, duration: 1.55, ease: "elastic.out(1, 0.45)", delay }
-            );
-
-            gsap.fromTo(image,
-                { opacity: 0, scale: 0.35, rotation: -120 },
-                { opacity: 1, scale: 1, rotation: 0, duration: 1.1, ease: "back.out(1.6)", delay: delay + 0.35 }
-            );
-
-            gsap.fromTo(details,
-                { opacity: 0, y: 26 },
-                { opacity: 1, y: 0, duration: 0.65, stagger: 0.12, ease: "power3.out", delay: delay + 0.65 }
-            );
-        };
-
-        const attachTilt = (card) => {
-            if (reduceMotion) return;
-
-            const setGlow = (xPercent, yPercent, opacity) => {
-                card.style.setProperty('--glow-x', `${xPercent}%`);
-                card.style.setProperty('--glow-y', `${yPercent}%`);
-                card.style.setProperty('--glow-opacity', opacity);
-            };
-
-            const tiltCard = (event, strength = 1) => {
-                const rect = card.getBoundingClientRect();
-                const x = event.clientX - rect.left;
-                const y = event.clientY - rect.top;
-                const xPercent = Math.min(Math.max((x / rect.width) * 100, 0), 100);
-                const yPercent = Math.min(Math.max((y / rect.height) * 100, 0), 100);
-                const rotateY = ((xPercent - 50) / 50) * 13 * strength;
-                const rotateX = ((50 - yPercent) / 50) * 11 * strength;
-
-                setGlow(xPercent, yPercent, 1);
-                gsap.to(card, {
-                    rotationY: rotateY,
-                    rotationX: rotateX,
-                    scale: event.pointerType === 'touch' ? 1.025 : 1.035,
-                    duration: 0.35,
-                    ease: "power2.out"
-                });
-            };
-
-            const resetTilt = () => {
-                card.classList.remove('is-touching');
-                setGlow(50, 20, 0);
-                gsap.to(card, {
-                    rotationY: 0,
-                    rotationX: 0,
-                    scale: 1,
-                    duration: 0.65,
-                    ease: "elastic.out(1, 0.45)"
-                });
-            };
-
-            card.addEventListener('pointermove', (event) => {
-                activeTiltCard = card;
-                moveTouchOrb(event, event.pointerType === 'touch');
-                tiltCard(event, event.pointerType === 'touch' ? 0.95 : 1);
-            });
-            card.addEventListener('pointerdown', (event) => {
-                isPointerActive = true;
-                activeTiltCard = card;
-                card.classList.add('is-touching');
-                card.setPointerCapture?.(event.pointerId);
-                moveTouchOrb(event, true);
-                tiltCard(event, event.pointerType === 'touch' ? 1.05 : 0.85);
-            });
-            card.addEventListener('pointerup', () => {
-                isPointerActive = false;
-                hideTouchOrb();
-                resetTilt();
-            });
-            card.addEventListener('pointercancel', () => {
-                isPointerActive = false;
-                hideTouchOrb();
-                resetTilt();
-            });
-            card.addEventListener('pointerleave', resetTilt);
-        };
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const cards = gsap.utils.toArray('.core-member-card');
-
-            cards.forEach((card) => {
-                gsap.set(card.querySelectorAll('.member-image-wrapper, .member-name, .member-role, .member-divider, .social-btn'), { opacity: 0 });
-                attachTilt(card);
-            });
-
-            if (reduceMotion) {
-                gsap.set(cards, { opacity: 1, clearProps: "transform" });
-                gsap.set('.member-image-wrapper, .member-name, .member-role, .member-divider, .social-btn', { opacity: 1, clearProps: "transform" });
-            } else {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            activeTiltCard = entry.target;
-                            revealCard(entry.target, entry.target === cards[0] ? 0.25 : 0);
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.45 });
-
-                cards.forEach((card) => observer.observe(card));
-            }
-
-            const activeObserver = new IntersectionObserver((entries) => {
-                const centered = entries
-                    .filter((entry) => entry.isIntersecting)
-                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-                if (centered) activeTiltCard = centered.target;
-            }, { threshold: [0.35, 0.55, 0.75] });
-
-            cards.forEach((card) => activeObserver.observe(card));
-
-            if (!reduceMotion && window.DeviceOrientationEvent) {
-                window.addEventListener('deviceorientation', (event) => {
-                    if (!activeTiltCard || isPointerActive || event.beta === null || event.gamma === null) return;
-
-                    const rotateY = gsap.utils.clamp(-9, 9, event.gamma * 0.35);
-                    const rotateX = gsap.utils.clamp(-8, 8, (event.beta - 45) * -0.18);
-                    const glowX = gsap.utils.clamp(18, 82, 50 + rotateY * 2.6);
-                    const glowY = gsap.utils.clamp(16, 66, 34 - rotateX * 1.7);
-
-                    activeTiltCard.style.setProperty('--glow-x', `${glowX}%`);
-                    activeTiltCard.style.setProperty('--glow-y', `${glowY}%`);
-                    activeTiltCard.style.setProperty('--glow-opacity', 0.45);
-
-                    gsap.to(activeTiltCard, {
-                        rotationY: rotateY,
-                        rotationX: rotateX,
-                        scale: 1.012,
-                        duration: 0.45,
-                        ease: "power2.out"
-                    });
-                }, { passive: true });
-            }
-
-            window.addEventListener('pointermove', (event) => moveTouchOrb(event), { passive: true });
-            window.addEventListener('pointerup', hideTouchOrb, { passive: true });
-            window.addEventListener('pointercancel', hideTouchOrb, { passive: true });
-
-            // Back button fade in
-            gsap.fromTo('.back-btn',
-                { opacity: 0, x: -30 },
-                { opacity: 1, x: 0, duration: 0.6, ease: "power2.out", delay: 0.8 }
-            );
+    // Blob animations
+    document.querySelectorAll('.blob').forEach((blob, i) => {
+        gsap.to(blob, {
+            x: () => gsap.utils.random(-300, 300),
+            y: () => gsap.utils.random(-300, 300),
+            scale: () => gsap.utils.random(0.8, 1.5),
+            duration: () => gsap.utils.random(8, 15),
+            repeat: -1, yoyo: true, ease: "sine.inOut", delay: i * 0.5
         });
+    });
+
+    // Particle animations
+    document.querySelectorAll('.particle').forEach((p, i) => {
+        gsap.to(p, {
+            opacity: gsap.utils.random(0.15, 0.5),
+            y: gsap.utils.random(-30, 30),
+            x: gsap.utils.random(-15, 15),
+            duration: gsap.utils.random(3, 6),
+            repeat: -1, yoyo: true, ease: "sine.inOut", delay: i * 0.3
+        });
+    });
+
+    function getPos(idx) {
+        let diff = idx - activeIdx;
+        const half = Math.floor(TOTAL / 2);
+        if (diff > half) diff -= TOTAL;
+        if (diff < -half) diff += TOTAL;
+        if (diff === 0) return 'active';
+        if (diff === -1) return 'prev';
+        if (diff === 1) return 'next';
+        if (diff === -2) return 'prev2';
+        if (diff === 2) return 'next2';
+        return 'hidden';
+    }
+
+    function updateSlides() {
+        photosArea.querySelectorAll('.member-slide').forEach((s, i) => {
+            s.dataset.pos = getPos(i);
+        });
+    }
+
+    function animateInfo() {
+        const m = MEMBERS[activeIdx];
+        const els = {
+            role: document.getElementById('roleLabel'),
+            name: document.getElementById('nameLabel'),
+            counter: document.getElementById('counterCurrent'),
+            bio: document.getElementById('bioText'),
+        };
+
+        gsap.killTweensOf([els.role, els.name, els.bio, '.member-counter']);
+
+        gsap.timeline({
+            onComplete: () => {
+                els.role.textContent = m.role;
+                els.name.textContent = m.name;
+                els.counter.textContent = String(activeIdx + 1).padStart(2, '0');
+                els.bio.textContent = m.bio;
+
+                gsap.to(els.role, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
+                gsap.to(els.name, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", delay: 0.1 });
+                gsap.to('.member-counter', { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", delay: 0.2 });
+                gsap.to(els.bio, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", delay: 0.3 });
+                isAnimating = false;
+            }
+        })
+        .to([els.role, els.name, '.member-counter', els.bio], { opacity: 0, y: -10, duration: 0.3, ease: "power2.inOut" });
+    }
+
+    function updateProgress() {
+        progressTrack.querySelectorAll('.progress-dot').forEach((d, i) => d.classList.toggle('active', i === activeIdx));
+    }
+
+    function goTo(idx) {
+        if (isAnimating || idx === activeIdx) return;
+        isAnimating = true;
+        activeIdx = ((idx % TOTAL) + TOTAL) % TOTAL;
+        updateSlides();
+        updateProgress();
+        animateInfo();
+    }
+
+    function next() { goTo((activeIdx + 1) % TOTAL); }
+    function prev() { goTo((activeIdx - 1 + TOTAL) % TOTAL); }
+
+    document.getElementById('navNext').addEventListener('click', next);
+    document.getElementById('navPrev').addEventListener('click', prev);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') next();
+        if (e.key === 'ArrowLeft') prev();
+    });
+
+    let wheelT;
+    document.getElementById('showcase').addEventListener('wheel', (e) => {
+        if (wheelT) return;
+        if (Math.abs(e.deltaY) > 30) {
+            e.deltaY > 0 ? next() : prev();
+            wheelT = setTimeout(() => { wheelT = null; }, 700);
+        }
+    }, { passive: true });
+
+    let touchX = 0;
+    const sc = document.getElementById('showcase');
+    sc.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+    sc.addEventListener('touchend', (e) => {
+        const d = touchX - e.changedTouches[0].clientX;
+        if (Math.abs(d) > 50) { d > 0 ? next() : prev(); }
+    }, { passive: true });
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+        updateSlides();
+        updateProgress();
+        const m = MEMBERS[0];
+        document.getElementById('counterTotal').textContent = String(TOTAL).padStart(2, '0');
+        document.getElementById('roleLabel').textContent = m.role;
+        document.getElementById('nameLabel').textContent = m.name;
+        document.getElementById('counterCurrent').textContent = '01';
+        document.getElementById('bioText').textContent = m.bio;
+
+        gsap.fromTo('.back-btn', { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5, delay: 0.2, ease: "power2.out" });
+        gsap.fromTo('.page-title', { opacity: 0, y: -15 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.3, ease: "power2.out" });
+        gsap.fromTo('#roleLabel', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.5, ease: "power3.out" });
+        gsap.fromTo('#nameLabel', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.6, ease: "power3.out" });
+        gsap.fromTo('.member-counter', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, delay: 0.7, ease: "power3.out" });
+        gsap.fromTo('#bioText', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, delay: 0.75, ease: "power3.out" });
+    });
     </script>
 </body>
 </html>
