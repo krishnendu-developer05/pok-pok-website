@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="initial-scale=1, width=device-width">
+  	
+  	<script src="https://cdn.tailwindcss.com"></script>
+  	<script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              whitesmoke: "#f9f9f9",
+              brown: "#a42d42",
+              gray: {
+                "100": "rgba(255, 255, 255, 0.7)",
+                "200": "rgba(0, 0, 0, 0)"
+              },
+              gainsboro: {
+                "100": "#d9d9d9",
+                "200": "rgba(217, 217, 217, 0.2)"
+              },
+              white: "#fff",
+              black: "#000"
+            },
+            spacing: {
+              "num-65": "65px",
+              "num-78": "78px"
+            },
+            fontFamily: {
+              "yeseva-one": "Yeseva One",
+              "bebas-neue": "Bebas Neue",
+              "inter": "Inter"
+            },
+            borderRadius: {
+              "num-19_54": "19.54px"
+            }
+          },
+          fontSize: {
+            "num-14": "0.875rem"
+          }
+        }
+      }
+  	</script>
+  	<style type="text/tailwindcss">
+      @layer base {
+        body {
+          @apply leading-[normal] m-0;
+        }
+        *,
+        *::before,
+        *::after {
+          border-width: 0;
+        }
+      }
+  	</style>
+  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Bebas+Neue&family=Inter:wght@400;700&display=swap" />
+  	
+  	
+  	
+</head>
+<body>
+  	
+  	<div class="w-full h-[57.313rem] relative overflow-hidden bg-cover bg-no-repeat bg-[top] text-center text-[3.118rem] text-whitesmoke font-yeseva-one" style="background-image: url('./assets/background.png');">
+    		<div class="absolute top-[2.375rem] left-[0.938rem] shrink-0">Live now:</div>
+    		<div class="absolute top-[7.688rem] left-[calc(50%_-_191px)] rounded-xl w-[23.813rem] h-[42.738rem] overflow-y-auto flex flex-col items-center gap-[1.218rem] shrink-0 text-left text-[0.875rem]">
+      			<!-- VOTING WIDGET -->
+      			<!-- View State -->
+      			<div id="voting-view" class="w-[23.75rem] h-[13.438rem] shadow-[0px_4px_4px_rgba(0,_0,_0,_0.5)] rounded-[20px] [background:linear-gradient(180deg,_#a7a7a7_21.15%,_#414141)] shrink-0 flex flex-col items-start pt-[1.562rem] pb-[1.312rem] pl-[1.937rem] pr-[2.75rem] box-border relative isolate gap-[0.937rem] text-left text-[0.875rem] transition-all duration-300">
+        				<div id="voting-view-list" class="w-[20.438rem] h-[8.938rem] !m-0 absolute top-[4.5rem] left-[calc(50%_-_164.5px)] flex flex-col items-start gap-[0.625rem] z-[0] shrink-0">
+          					<!-- Populated by JS -->
+        				</div>
+        				<div class="flex items-center gap-[0.625rem] z-[1] shrink-0 w-full justify-between mt-auto">
+          					<div id="voting-view-title" class="w-[18.375rem] relative inline-block shrink-0 [text-shadow:1px_0_0_#000,_0_1px_0_#000,_-1px_0_0_#000,_0_-1px_0_#000] font-yeseva-one select-none">Constant Text Title</div>
+          					<button onclick="editVotingWidget()" class="h-[1.5rem] w-[1.5rem] relative cursor-pointer hover:scale-110 active:scale-95 transition-all" title="Edit list">
+            						<img class="size-full" alt="" src="./assets/edit_icon.svg">
+          					</button>
+        				</div>
+      			</div>
+      			<!-- Edit State -->
+      			<div id="voting-edit" class="hidden w-[23.75rem] h-[13.438rem] shadow-[0px_4px_4px_rgba(0,_0,_0,_0.5)] rounded-[20px] [background:linear-gradient(180deg,_#a7a7a7_21.15%,_#414141)] shrink-0 flex flex-col pt-[1rem] pb-[0.8rem] px-[1.5rem] box-border relative isolate gap-[0.4rem] text-left text-[0.875rem] transition-all duration-300">
+        				<!-- Header Row -->
+        				<div class="flex items-center justify-between w-full z-[1]">
+          					<input type="text" id="voting-title-input" class="bg-black/40 border border-white/20 text-white font-yeseva-one rounded px-2.5 py-0.5 text-[0.85rem] w-[16.5rem] focus:outline-none focus:border-white/50" />
+          					<button onclick="saveVotingWidget()" class="text-white hover:text-red-400 font-bold text-xl cursor-pointer p-0.5" title="Save Changes">
+            						&times;
+          					</button>
+        				</div>
+        				<!-- Events List -->
+        				<div id="voting-edit-list" class="w-full flex-1 overflow-y-auto flex flex-col gap-[0.35rem] pr-1 mt-1 z-[0]">
+          					<!-- Populated by JS -->
+        				</div>
+        				<!-- Footer Row -->
+        				<div class="w-full flex justify-center mt-1 z-[1]">
+          					<button onclick="addVotingEvent()" class="bg-[#2A2A2A] hover:bg-[#3A3A3A] active:scale-95 text-white text-[0.75rem] font-bold rounded-full py-1.5 px-6 transition-all duration-200 shadow-md cursor-pointer">
+            						Add more
+          					</button>
+        				</div>
+      			</div>
+
+      			<!-- GAMEBOX WIDGET -->
+      			<!-- View State -->
+      			<div id="gamebox-view" class="w-[23.813rem] h-[18.925rem] shadow-[0px_3.9076924324035645px_3.91px_rgba(0,_0,_0,_0.5)] rounded-num-19_54 shrink-0 flex flex-col items-center pt-[0rem] px-[0rem] pb-[4.7rem] box-border relative isolate gap-[0.368rem] text-[1.588rem] text-white font-bebas-neue transition-all duration-300">
+        				<div class="w-[23.2rem] h-[7.019rem] absolute !m-0 top-[11.906rem] left-[calc(50%_-_185.12px)] rounded-num-19_54 bg-brown z-[0] shrink-0"></div>
+        				<div class="self-stretch h-[13.369rem] relative shadow-[0px_3.9076924324035645px_9.77px_rgba(0,_0,_0,_0.5)] rounded-num-19_54 bg-gray-200 z-[1] shrink-0 overflow-hidden">
+          					<img class="absolute top-[0rem] left-[0rem] rounded-num-19_54 w-[23.813rem] h-[13.369rem] object-cover shrink-0" alt="" src="./assets/cyberpunk.png">
+        				</div>
+        				<div class="w-[21.369rem] h-[4.094rem] flex flex-col items-center justify-between gap-[0.612rem] z-[2] shrink-0 text-left">
+          					<div class="self-stretch flex items-start justify-center">
+            						<div id="gamebox-view-name" class="flex-1 relative tracking-[0.1em] text-left uppercase truncate">GAME NAME</div>
+            						<button onclick="editGameBoxWidget()" class="h-[1.769rem] w-[1.769rem] relative cursor-pointer hover:scale-110 active:scale-95 transition-all" title="Edit Game details">
+              							<img class="size-full" alt="" src="./assets/edit_icon_2.svg">
+            						</button>
+          					</div>
+          					<div class="self-stretch h-[2.381rem] flex flex-col items-center justify-between gap-[0rem] text-[1.099rem]">
+            						<div class="self-stretch h-[1.344rem] flex items-center justify-center py-[0.125rem] px-[0rem] box-border">
+              							<div class="h-[1.344rem] flex-1 relative tracking-[0.1em] text-left">Leader Board</div>
+            						</div>
+            						<div class="self-stretch relative text-[0.855rem] tracking-[0.1em] text-gray-100 text-left">Not announced yet</div>
+          					</div>
+        				</div>
+      			</div>
+      			<!-- Edit State -->
+      			<div id="gamebox-edit" class="hidden w-[23.813rem] h-[18.925rem] shadow-[0px_3.9076924324035645px_3.91px_rgba(0,_0,_0,_0.5)] rounded-num-19_54 shrink-0 flex flex-col items-center box-border relative isolate gap-[0.368rem] text-white font-bebas-neue transition-all duration-300">
+        				<!-- Cyberpunk Header Artwork -->
+        				<div class="self-stretch h-[6rem] relative rounded-t-num-19_54 bg-gray-200 z-[1] shrink-0 overflow-hidden">
+          					<img class="absolute top-[-2rem] left-[0rem] w-[23.813rem] h-[13.369rem] object-cover shrink-0 opacity-40" alt="" src="./assets/cyberpunk.png">
+        				</div>
+        				
+        				<!-- Inputs Container Background -->
+        				<div class="w-full flex-1 bg-brown rounded-b-num-19_54 pt-[0.4rem] pb-[0.6rem] px-[1.2rem] box-border flex flex-col justify-between z-[2] text-left">
+          					<!-- Game Title and Link inputs with SAVE button -->
+          					<div class="flex flex-col gap-[0.3rem]">
+            						<div class="flex items-center justify-between w-full">
+              							<input type="text" id="gamebox-name-input" placeholder="GAME NAME" class="bg-black/35 border border-white/20 text-white font-bebas-neue tracking-[0.1em] rounded px-2.5 py-0.5 text-[1.1rem] w-[14.5rem] uppercase focus:outline-none focus:border-white/50" />
+              							<button onclick="saveGameBoxWidget()" class="bg-white/20 hover:bg-white/30 text-white border border-white/40 text-[0.8rem] rounded px-3 py-1 tracking-[0.05em] flex items-center gap-1 transition-all duration-200 cursor-pointer active:scale-95">
+                								SAVE &times;
+              							</button>
+            						</div>
+            						<input type="text" id="gamebox-link-input" placeholder="ADD GAME LINK HERE (HTTP://...)" class="w-full bg-black/25 border border-white/10 rounded px-2 py-0.5 text-[0.75rem] text-white tracking-[0.05em] focus:outline-none focus:border-white/30" />
+          					</div>
+          					
+          					<!-- Leaderboard Editable inputs -->
+          					<div class="flex flex-col gap-[0.25rem]">
+            						<div class="flex items-center justify-between text-[0.8rem] tracking-[0.1em] border-b border-white/20 pb-0.5 mb-0.5 font-bebas-neue text-gray-100 font-bold">
+              							<span>LEADER BOARD EDITABLE</span>
+              							<span>POINTS</span>
+            						</div>
+            						<div id="gamebox-edit-players" class="flex flex-col gap-[0.25rem]">
+              							<!-- Populated by JS -->
+            						</div>
+          					</div>
+        				</div>
+      			</div>
+      			<!-- Published State -->
+      			<div id="gamebox-published" class="hidden w-[23.813rem] h-[18.925rem] shadow-[0px_3.9076924324035645px_3.91px_rgba(0,_0,_0,_0.5)] rounded-num-19_54 shrink-0 flex flex-col items-center pt-[0rem] px-[0rem] pb-[4.7rem] box-border relative isolate gap-[0.368rem] text-[1.588rem] text-white font-bebas-neue transition-all duration-300">
+        				<!-- Active Clickable Cyberpunk Header Artwork -->
+        				<div class="w-[23.2rem] h-[7.019rem] absolute !m-0 top-[11.906rem] left-[calc(50%_-_185.12px)] rounded-num-19_54 bg-brown z-[0] shrink-0"></div>
+        				<a id="gamebox-published-link" href="#" target="_blank" class="self-stretch h-[13.369rem] relative shadow-[0px_3.9076924324035645px_9.77px_rgba(0,_0,_0,_0.5)] rounded-num-19_54 bg-gray-200 z-[1] shrink-0 overflow-hidden block group cursor-pointer">
+          					<img class="absolute top-[0rem] left-[0rem] rounded-num-19_54 w-[23.813rem] h-[13.369rem] object-cover shrink-0 group-hover:scale-[1.02] transition-transform duration-300" alt="" src="./assets/cyberpunk.png">
+          					<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            						<span class="text-[0.75rem] tracking-[0.1em] font-sans text-white border border-white/50 rounded-full px-4 py-1.5 bg-black/50">OPEN GAME LINK ↗</span>
+          					</div>
+        				</a>
+        				
+        				<!-- Details Container -->
+        				<div class="w-[21.369rem] h-[4.094rem] flex flex-col justify-between gap-[0.15rem] z-[2] shrink-0 text-left">
+          					<!-- Title and Edit Icon -->
+          					<div class="self-stretch flex items-center justify-between gap-2">
+            						<div id="gamebox-published-name" class="flex-1 text-left tracking-[0.1em] truncate uppercase text-[1.5rem]">GAME NAME</div>
+            						<button onclick="editGameBoxWidget()" class="h-[1.769rem] w-[1.769rem] relative cursor-pointer hover:scale-110 active:scale-95 transition-all shrink-0" title="Edit Game details">
+              							<img class="size-full" alt="" src="./assets/edit_icon_2.svg">
+            						</button>
+          					</div>
+          					
+          					<!-- Leaderboard Published List -->
+          					<div class="self-stretch flex flex-col tracking-[0.1em] gap-[0.05rem]">
+            						<div class="flex items-center justify-between text-gray-100 font-bold border-b border-white/10 pb-[0.05rem] mb-[0.05rem] text-[0.8rem]">
+              							<span>LEADER BOARD PUBLISHED</span>
+              							<span>POINTS</span>
+            						</div>
+            						<div id="gamebox-published-players" class="flex flex-col gap-[0.05rem]">
+              							<!-- Populated by JS -->
+            						</div>
+          					</div>
+        				</div>
+      			</div>
+      			<div class="self-stretch h-[20.819rem] rounded-num-19_54 [background:linear-gradient(180deg,_#d9d9d9,_#737373_58.17%)] shrink-0 flex items-start justify-center pt-[1.956rem] px-[5.737rem] pb-[16.793rem] box-border text-center text-[1.709rem] text-black font-inter">
+        				<div class="relative shrink-0">Game Library<br>Coming Soon</div>
+      			</div>
+    		</div>
+    		<div class="absolute top-[52.125rem] left-[calc(50%_-_195px)] flex items-center gap-[1rem] shrink-0">
+      			<div class="h-[4.875rem] w-[4.063rem] relative bg-gainsboro-100/60 hover:bg-white/95 hover:scale-105 active:scale-95 transition-all duration-300 shadow-md cursor-pointer rounded-lg flex items-center justify-center font-sans text-xs font-bold text-black/70">
+              1
+      			</div>
+      			<div class="h-[4.875rem] w-[4.063rem] relative bg-gainsboro-100/60 hover:bg-white/95 hover:scale-105 active:scale-95 transition-all duration-300 shadow-md cursor-pointer rounded-lg flex items-center justify-center font-sans text-xs font-bold text-black/70">
+              2
+      			</div>
+      			<div class="h-[4.875rem] w-[4.063rem] relative bg-gainsboro-100/60 hover:bg-white/95 hover:scale-105 active:scale-95 transition-all duration-300 shadow-md cursor-pointer rounded-lg flex items-center justify-center font-sans text-xs font-bold text-black/70">
+              3
+      			</div>
+      			<div class="h-[4.875rem] w-[4.063rem] relative bg-gainsboro-100/60 hover:bg-white/95 hover:scale-105 active:scale-95 transition-all duration-300 shadow-md cursor-pointer rounded-lg flex items-center justify-center font-sans text-xs font-bold text-black/70">
+              4
+      			</div>
+      			<div class="h-[4.875rem] w-[4.063rem] relative bg-gainsboro-100/60 hover:bg-white/95 hover:scale-105 active:scale-95 transition-all duration-300 shadow-md cursor-pointer rounded-lg flex items-center justify-center font-sans text-xs font-bold text-black/70">
+              5
+      			</div>
+    		</div>
+  	</div>
+  	
+  	<script>
+      // 1. Define interactive global state object
+      const state = {
+        voting: {
+          isEditing: false,
+          selectedIndex: 0,
+          title: "Constant Text Title",
+          events: ["Event", "Event", "Event", "Event"]
+        },
+        gameBox: {
+          mode: "view", // "view" | "edit" | "published"
+          name: "GAME NAME",
+          link: "",
+          players: [
+            { name: "", points: 0 },
+            { name: "", points: 0 },
+            { name: "", points: 0 }
+          ]
+        }
+      };
+
+      // 2. Voting Widget functions
+      window.editVotingWidget = function() {
+        state.voting.isEditing = true;
+        // Pre-fill input value
+        const titleInput = document.getElementById('voting-title-input');
+        if (titleInput) titleInput.value = state.voting.title;
+        renderVotingWidget();
+      };
+
+      window.saveVotingWidget = function() {
+        const titleInput = document.getElementById('voting-title-input');
+        if (titleInput) {
+          state.voting.title = titleInput.value.trim() || "Constant Text Title";
+        }
+        state.voting.isEditing = false;
+        renderVotingWidget();
+      };
+
+      window.selectVotingEvent = function(index) {
+        state.voting.selectedIndex = index;
+        renderVotingWidget();
+      };
+
+      window.updateVotingEvent = function(index, val) {
+        state.voting.events[index] = val;
+      };
+
+      window.addVotingEvent = function() {
+        state.voting.events.push("New Event");
+        renderVotingWidget();
+        // Scroll list to bottom
+        const list = document.getElementById('voting-edit-list');
+        if (list) list.scrollTop = list.scrollHeight;
+      };
+
+      window.removeVotingEvent = function(index) {
+        state.voting.events.splice(index, 1);
+        if (state.voting.selectedIndex >= state.voting.events.length) {
+          state.voting.selectedIndex = Math.max(0, state.voting.events.length - 1);
+        }
+        renderVotingWidget();
+      };
+
+      window.renderVotingWidget = function() {
+        const viewEl = document.getElementById('voting-view');
+        const editEl = document.getElementById('voting-edit');
+        if (!viewEl || !editEl) return;
+
+        if (state.voting.isEditing) {
+          viewEl.classList.add('hidden');
+          editEl.classList.remove('hidden');
+
+          const editList = document.getElementById('voting-edit-list');
+          if (editList) {
+            editList.innerHTML = state.voting.events.map((event, index) => `
+              <div class="flex items-center gap-[0.5rem] w-full bg-black/10 hover:bg-black/20 rounded px-1.5 py-0.5">
+                <img class="w-[1.125rem] h-[1.125rem] shrink-0" src="./assets/ellipse_unchecked.svg" />
+                <input type="text" oninput="updateVotingEvent(${index}, this.value)" value="${event}" class="flex-1 bg-transparent border-0 border-b border-transparent focus:border-white/20 text-[0.8rem] text-white focus:outline-none font-yeseva-one" />
+                <button onclick="removeVotingEvent(${index})" class="text-white/60 hover:text-white cursor-pointer px-1 text-[1.1rem]" title="Remove event">&times;</button>
+              </div>
+            `).join('');
+          }
+        } else {
+          editEl.classList.add('hidden');
+          viewEl.classList.remove('hidden');
+
+          const viewTitle = document.getElementById('voting-view-title');
+          if (viewTitle) viewTitle.textContent = state.voting.title;
+
+          const viewList = document.getElementById('voting-view-list');
+          if (viewList) {
+            viewList.innerHTML = state.voting.events.map((event, index) => {
+              const isChecked = index === state.voting.selectedIndex;
+              const checkboxSrc = isChecked ? "./assets/ellipse_checked.svg" : "./assets/ellipse_unchecked.svg";
+              const itemWidthClass = index === 0 ? "flex flex-col items-start justify-center" : "w-[8.063rem] flex flex-col items-start justify-center shrink-0";
+              const itemGapClass = index === 0 ? "gap-[1.125rem]" : "gap-[0rem]";
+              
+              return `
+                <div onclick="selectVotingEvent(${index})" class="self-stretch flex items-center justify-between ${itemGapClass} cursor-pointer hover:bg-white/5 rounded px-1 -mx-1 py-0.5 transition-colors">
+                  <div class="${itemWidthClass}">
+                    <img class="w-[1.125rem] h-[1.125rem] relative shrink-0" alt="" src="${checkboxSrc}">
+                  </div>
+                  <div class="w-[18.188rem] relative inline-block shrink-0 [text-shadow:1px_0_0_#000,_0_1px_0_#000,_-1px_0_0_#000,_0_-1px_0_#000] font-yeseva-one">${event}</div>
+                </div>
+              `;
+            }).join('');
+          }
+        }
+      };
+
+      // 3. GameBox Widget functions
+      window.editGameBoxWidget = function() {
+        state.gameBox.mode = "edit";
+        
+        // Pre-fill input values
+        const nameInput = document.getElementById('gamebox-name-input');
+        const linkInput = document.getElementById('gamebox-link-input');
+        if (nameInput) nameInput.value = state.gameBox.name;
+        if (linkInput) linkInput.value = state.gameBox.link;
+        
+        renderGameBoxWidget();
+      };
+
+      window.saveGameBoxWidget = function() {
+        const nameInput = document.getElementById('gamebox-name-input');
+        const linkInput = document.getElementById('gamebox-link-input');
+        if (nameInput) state.gameBox.name = nameInput.value.trim() || "GAME NAME";
+        if (linkInput) state.gameBox.link = linkInput.value.trim();
+
+        // Check if there is data inside players to publish, otherwise fallback to view state
+        const hasPlayers = state.gameBox.players.some(p => p.name.trim() !== "");
+        state.gameBox.mode = hasPlayers ? "published" : "view";
+        renderGameBoxWidget();
+      };
+
+      window.updatePlayerName = function(index, val) {
+        state.gameBox.players[index].name = val;
+      };
+
+      window.updatePlayerPoints = function(index, val) {
+        state.gameBox.players[index].points = parseInt(val) || 0;
+      };
+
+      window.renderGameBoxWidget = function() {
+        const viewEl = document.getElementById('gamebox-view');
+        const editEl = document.getElementById('gamebox-edit');
+        const pubEl = document.getElementById('gamebox-published');
+        if (!viewEl || !editEl || !pubEl) return;
+
+        // Hide all first
+        viewEl.classList.add('hidden');
+        editEl.classList.add('hidden');
+        pubEl.classList.add('hidden');
+
+        if (state.gameBox.mode === "edit") {
+          editEl.classList.remove('hidden');
+
+          const editPlayers = document.getElementById('gamebox-edit-players');
+          if (editPlayers) {
+            editPlayers.innerHTML = state.gameBox.players.map((player, index) => `
+              <div class="flex items-center justify-between gap-2">
+                <input type="text" oninput="updatePlayerName(${index}, this.value)" value="${player.name}" placeholder="ENTER NAME" class="flex-1 bg-black/20 border border-white/10 rounded px-2.5 py-0.5 text-[0.8rem] text-white tracking-[0.1em] uppercase focus:outline-none focus:border-white/30 font-bebas-neue" />
+                <input type="number" oninput="updatePlayerPoints(${index}, this.value)" value="${player.points}" class="w-[3.5rem] bg-black/20 border border-white/10 rounded px-2.5 py-0.5 text-[0.8rem] text-white text-right font-sans focus:outline-none focus:border-white/30" />
+              </div>
+            `).join('');
+          }
+        } else if (state.gameBox.mode === "published") {
+          pubEl.classList.remove('hidden');
+
+          const pubName = document.getElementById('gamebox-published-name');
+          if (pubName) pubName.textContent = state.gameBox.name;
+
+          const pubLink = document.getElementById('gamebox-published-link');
+          if (pubLink) pubLink.href = state.gameBox.link || "#";
+
+          const rankedPlayers = [...state.gameBox.players].sort((a, b) => b.points - a.points);
+          const pubPlayers = document.getElementById('gamebox-published-players');
+          if (pubPlayers) {
+            pubPlayers.innerHTML = rankedPlayers.map((player) => `
+              <div class="flex items-center justify-between text-white uppercase text-[0.75rem] py-0.5 border-b border-white/5 last:border-b-0">
+                <span>${player.name || 'ENTER NAME'}</span>
+                <span class="font-sans font-bold text-[0.8rem]">${player.points}</span>
+              </div>
+            `).join('');
+          }
+        } else {
+          viewEl.classList.remove('hidden');
+
+          const viewName = document.getElementById('gamebox-view-name');
+          if (viewName) viewName.textContent = state.gameBox.name;
+        }
+      };
+
+      // 4. Initial renders on DOM ready
+      document.addEventListener('DOMContentLoaded', () => {
+        renderVotingWidget();
+        renderGameBoxWidget();
+      });
+  	</script>
+</body>
+</html>
