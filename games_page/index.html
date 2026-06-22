@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, width=device-width">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            whitesmoke: "#f9f9f9",
+            brown: "#a42d42",
+            gray: {
+              "100": "rgba(255, 255, 255, 0.7)",
+              "200": "rgba(0, 0, 0, 0)"
+            },
+            gainsboro: {
+              "100": "#d9d9d9",
+              "200": "rgba(217, 217, 217, 0.2)"
+            },
+            white: "#fff",
+            black: "#000"
+          },
+          spacing: {
+            "num-65": "65px",
+            "num-78": "78px"
+          },
+          fontFamily: {
+            "yeseva-one": "Yeseva One",
+            "bebas-neue": "Bebas Neue",
+            "inter": "Inter"
+          },
+          borderRadius: {
+            "num-19_54": "19.54px"
+          }
+        },
+        fontSize: {
+          "num-14": "0.875rem"
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+        body {
+          @apply leading-[normal] m-0;
+        }
+        *,
+        *::before,
+        *::after {
+          border-width: 0;
+        }
+      }
+      @layer utilities {
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      }
+  	</style>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Bebas+Neue&family=Inter:wght@400;700&display=swap" />
+
+
+
+</head>
+
+<body
+  class="min-h-screen w-full bg-gradient-to-br from-[#05070c] via-[#0f131d] to-[#040609] flex items-center justify-center m-0 p-0 md:py-8 md:px-4 overflow-y-auto font-inter">
+
+  <!-- PREMIUM SMARTPHONE MOCKUP FRAME (ONLY ON DESKTOP/LARGE SCREENS) -->
+  <div
+    class="relative w-full max-w-[412px] h-screen md:h-[917px] md:rounded-[40px] md:border-[10px] md:border-[#1a1f2c] md:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),_0_0_50px_rgba(164,45,66,0.15)] overflow-hidden transition-all duration-300 md:bg-black select-none md:ring-1 md:ring-white/10 shrink-0">
+
+    <!-- FRONT CAMERA NOTCH / PUNCH HOLE -->
+    <div
+      class="hidden md:block absolute top-3.5 left-1/2 -translate-x-1/2 w-4 h-4 bg-black rounded-full z-50 border border-[#2a3142]/80">
+    </div>
+
+    <!-- PHONE STATUS BAR (TIME, BATTERY, WI-FI) -->
+    <div
+      class="absolute top-3 w-full px-6 flex justify-between items-center text-[0.7rem] font-sans font-medium text-white/80 z-40 select-none tracking-wider mix-blend-difference">
+      <span>9:41 AM</span>
+      <div class="flex items-center gap-1.5">
+        <span class="opacity-75">📶</span>
+        <span class="opacity-75">📶</span>
+        <span class="opacity-75">🔋</span>
+      </div>
+    </div>
+
+    <!-- PHONE HOME BOTTOM INDICATOR -->
+    <div class="hidden md:block absolute bottom-2.5 left-1/2 -translate-x-1/2 w-32 h-1 bg-white/40 rounded-full z-50">
+    </div>
+
+    <!-- MAIN APP CONTAINER (Android Compact size viewport) -->
+    <div
+      class="w-full h-full relative overflow-y-auto no-scrollbar bg-cover bg-no-repeat bg-[top] text-center text-[3.118rem] text-whitesmoke font-yeseva-one flex flex-col justify-start"
+      style="background-image: url('./assets/background.png');">
+      <div
+        class="absolute top-[2.375rem] left-[1.25rem] text-[2.5rem] tracking-tight shrink-0 select-none opacity-90 drop-shadow-md">
+        Live now:</div>
+
+      <!-- WIDGETS COLUMN (Fluid Responsive Column) -->
+      <div
+        class="absolute top-[6.8rem] bottom-[8.2rem] left-[16px] right-[16px] overflow-y-auto no-scrollbar flex flex-col items-center gap-[1.1rem] shrink-0 text-left text-[0.875rem]">
+        <!-- VOTING WIDGET -->
+        <!-- View State -->
+        <div id="voting-view"
+          class="w-full h-auto shadow-[0px_4px_4px_rgba(0,_0,_0,_0.5)] rounded-[20px] [background:linear-gradient(180deg,_#a7a7a7_21.15%,_#414141)] shrink-0 flex flex-col pt-[1.2rem] pb-[1.2rem] px-[1.5rem] box-border relative isolate gap-[0.8rem] text-left text-white font-yeseva-one transition-all duration-300">
+          <!-- Header Row -->
+          <div class="flex items-center justify-between w-full z-[1] shrink-0 select-none">
+            <div id="voting-view-title" class="text-[1.25rem] tracking-tight leading-tight select-none">Constant Text
+              Title</div>
+            <button onclick="editVotingWidget()"
+              class="h-[1.5rem] w-[1.5rem] relative cursor-pointer hover:scale-110 active:scale-95 transition-all text-white flex items-center justify-center shrink-0"
+              title="Edit list">
+              <svg class="size-full fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                <path
+                  d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z" />
+              </svg>
+            </button>
+          </div>
+          <!-- Events List Container -->
+          <div id="voting-view-list" class="w-full h-auto flex flex-col gap-[0.4rem] pr-1 z-[0]">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+        <!-- Edit State -->
+        <div id="voting-edit"
+          class="hidden w-full h-auto shadow-[0px_4px_4px_rgba(0,_0,_0,_0.5)] rounded-[20px] [background:linear-gradient(180deg,_#a7a7a7_21.15%,_#414141)] shrink-0 flex flex-col pt-[1.2rem] pb-[1.2rem] px-[1.5rem] box-border relative isolate gap-[0.4rem] text-left text-[0.875rem] transition-all duration-300 font-yeseva-one">
+          <!-- Header Row -->
+          <div class="flex items-center justify-between w-full z-[1] shrink-0 select-none gap-2">
+            <input type="text" id="voting-title-input"
+              class="bg-black/30 border border-white/10 text-white font-yeseva-one rounded px-3 py-1 text-[0.875rem] flex-1 min-w-0 focus:outline-none focus:border-white/40 font-yeseva-one" />
+            <button onclick="saveVotingWidget()"
+              class="bg-white/20 hover:bg-white/30 text-white border border-white/40 text-[0.8rem] rounded px-3.5 py-1.5 tracking-[0.05em] flex items-center justify-center transition-all duration-200 cursor-pointer active:scale-95 shrink-0 font-yeseva-one">
+              SAVE
+            </button>
+            <button onclick="state.voting.isEditing = false; renderVotingWidget();"
+              class="h-[1.6rem] w-[1.6rem] relative cursor-pointer hover:scale-110 active:scale-95 transition-all text-white flex items-center justify-center shrink-0"
+              title="Cancel Changes">
+              <svg class="size-full fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="4" />
+                <path d="M9 9l6 6M15 9l-6 6" />
+              </svg>
+            </button>
+          </div>
+          <!-- Events List Container -->
+          <div id="voting-edit-list" class="w-full h-auto flex flex-col gap-[0.4rem] pr-1 z-[0]">
+            <!-- Populated by JS -->
+          </div>
+          <!-- Footer Row -->
+          <div class="w-full flex justify-center mt-1.5 z-[1] shrink-0">
+            <button onclick="addVotingEvent()"
+              class="w-full bg-[#2a2a2a]/90 hover:bg-[#3a3a3a] active:scale-98 text-white font-yeseva-one tracking-wide rounded-xl py-2 text-center text-[0.85rem] transition-all cursor-pointer border border-white/5 shadow-md">
+              Add more
+            </button>
+          </div>
+        </div>
+
+        <!-- GAMEBOX WIDGET -->
+        <!-- View State -->
+        <div id="gamebox-view"
+          class="w-full bg-transparent flex flex-col rounded-num-19_54 overflow-hidden shadow-[0px_4px_12px_rgba(0,0,0,0.5)] shrink-0 transition-all duration-300">
+          <!-- Top Cyberpunk Artwork -->
+          <div class="w-full aspect-[23.8/13.3] relative overflow-hidden bg-neutral-900 shrink-0">
+            <img id="gamebox-view-img" class="absolute inset-0 w-full h-full object-cover select-none" alt=""
+              src="./assets/cyberpunk.png">
+          </div>
+
+          <!-- Bottom Red Card -->
+          <div class="w-full bg-brown px-5 py-4 flex flex-col gap-2.5 text-left text-white font-bebas-neue">
+            <!-- Title + Edit Button -->
+            <div class="flex items-center justify-between w-full">
+              <div id="gamebox-view-name" class="text-[1.588rem] tracking-[0.1em] uppercase truncate pr-2 select-none">
+                GAME NAME</div>
+              <button onclick="editGameBoxWidget()"
+                class="h-[1.2rem] w-[1.2rem] relative cursor-pointer hover:scale-110 active:scale-95 transition-all shrink-0 self-center -translate-y-[2.5px]"
+                title="Edit Game details">
+                <img class="size-full" alt="" src="./assets/edit_icon_2.svg">
+              </button>
+            </div>
+            <!-- Leader Board Status -->
+            <div class="flex flex-col gap-0.5 border-t border-white/10 pt-2">
+              <div class="text-[1.099rem] tracking-[0.1em]">Leader Board</div>
+              <div class="text-[0.855rem] tracking-[0.1em] text-gray-100">Not announced yet</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit State -->
+        <div id="gamebox-edit"
+          class="hidden w-full bg-transparent flex flex-col rounded-num-19_54 overflow-hidden shadow-[0px_4px_12px_rgba(0,0,0,0.5)] shrink-0 transition-all duration-300 font-inter">
+          <!-- Top Cyberpunk Artwork with Low Opacity -->
+          <div class="w-full h-[4.5rem] relative overflow-hidden bg-neutral-900 shrink-0">
+            <img id="gamebox-edit-img"
+              class="absolute inset-0 w-full h-[13.369rem] top-[-2rem] object-cover opacity-20 select-none" alt=""
+              src="./assets/cyberpunk.png">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brown/40"></div>
+          </div>
+
+          <!-- Bottom Red Card Inputs Area -->
+          <div class="w-full bg-brown px-5 py-4 flex flex-col gap-3.5 text-left text-white">
+            <!-- Game Title input row -->
+            <div class="flex flex-col gap-2 font-bebas-neue">
+              <div class="flex items-center justify-between w-full gap-2">
+                <input type="text" id="gamebox-name-input" placeholder="GAME NAME"
+                  class="bg-black/35 border border-white/20 text-white font-bebas-neue tracking-[0.1em] rounded px-3 py-1 text-[1.1rem] flex-1 min-w-0 uppercase focus:outline-none focus:border-white/50" />
+                <button onclick="saveGameBoxWidget()"
+                  class="bg-white/20 hover:bg-white/30 text-white border border-white/40 text-[0.8rem] rounded px-3.5 py-1.5 tracking-[0.05em] flex items-center gap-1 transition-all duration-200 cursor-pointer active:scale-95 shrink-0">
+                  SAVE
+                </button>
+                <button onclick="state.gameBox.mode = 'view'; renderGameBoxWidget();"
+                  class="h-[1.6rem] w-[1.6rem] relative cursor-pointer hover:scale-110 active:scale-95 transition-all text-white flex items-center justify-center shrink-0"
+                  title="Cancel">
+                  <svg class="size-full fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="18" height="18" rx="4" />
+                    <path d="M9 9l6 6M15 9l-6 6" />
+                  </svg>
+                </button>
+              </div>
+              <input type="text" id="gamebox-link-input" placeholder="ADD GAME LINK HERE (HTTP://...)"
+                class="w-full bg-black/25 border border-white/10 rounded px-2.5 py-1 text-[0.75rem] text-white tracking-[0.05em] focus:outline-none focus:border-white/30 font-sans" />
+            </div>
+
+            <!-- Image Customizer Selector -->
+            <div class="flex flex-col gap-1.5 border-t border-white/10 pt-3">
+              <div
+                class="flex items-center justify-between text-[0.85rem] tracking-[0.1em] font-bebas-neue text-gray-100 font-bold">
+                <span>GAME IMAGE SOURCE</span>
+              </div>
+              <div class="flex gap-2">
+                <!-- URL text input -->
+                <input type="text" id="gamebox-image-input" placeholder="PASTE IMAGE URL HERE..."
+                  class="flex-1 bg-black/25 border border-white/10 rounded px-2.5 py-1.5 text-[0.75rem] text-white tracking-[0.05em] focus:outline-none focus:border-white/30 font-sans" />
+
+                <!-- File upload hidden label button -->
+                <label
+                  class="bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 text-[0.75rem] font-sans font-bold rounded px-3 py-1.5 cursor-pointer flex items-center justify-center gap-1 transition-all duration-200 shrink-0 select-none active:scale-95">
+                  <span>UPLOAD</span>
+                  <input type="file" id="gamebox-file-input" accept="image/*" class="hidden"
+                    onchange="handleGameBoxImageUpload(this)" />
+                </label>
+              </div>
+            </div>
+
+            <!-- Leaderboard Editable inputs -->
+            <div class="flex flex-col gap-2 border-t border-white/10 pt-3">
+              <div
+                class="flex items-center justify-between text-[0.85rem] tracking-[0.1em] pb-1 font-bebas-neue text-gray-100 font-bold border-b border-white/10">
+                <span>LEADER BOARD EDITABLE</span>
+                <span>POINTS</span>
+              </div>
+              <div id="gamebox-edit-players" class="flex flex-col gap-2 font-bebas-neue">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Published State -->
+        <div id="gamebox-published"
+          class="hidden w-full bg-transparent flex flex-col rounded-num-19_54 overflow-hidden shadow-[0px_4px_12px_rgba(0,0,0,0.5)] shrink-0 transition-all duration-300">
+          <!-- Active Clickable Cyberpunk Header Artwork -->
+          <a id="gamebox-published-link" href="#" target="_blank"
+            class="w-full aspect-[23.8/13.3] relative overflow-hidden bg-neutral-900 shrink-0 block group cursor-pointer">
+            <img id="gamebox-published-img"
+              class="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300 select-none"
+              alt="" src="./assets/cyberpunk.png">
+            <div
+              class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+              <span
+                class="text-[0.75rem] tracking-[0.1em] font-sans text-white border border-white/50 rounded-full px-4 py-1.5 bg-black/50">OPEN
+                GAME LINK ↗</span>
+            </div>
+          </a>
+
+          <!-- Bottom Red Card with Leaderboard -->
+          <div class="w-full bg-brown px-5 py-4 flex flex-col gap-3 text-left text-white font-bebas-neue">
+            <!-- Title and Edit Icon -->
+            <div class="flex items-start justify-between w-full">
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between w-full">
+                  <div id="gamebox-published-name"
+                    class="text-[1.588rem] tracking-[0.1em] truncate uppercase select-none">GAME NAME</div>
+                  <button onclick="editGameBoxWidget()"
+                    class="h-[1.2rem] w-[1.2rem] relative cursor-pointer hover:scale-110 active:scale-95 transition-all shrink-0 ml-2 self-center -translate-y-[2.5px]"
+                    title="Edit Game details">
+                    <img class="size-full" alt="" src="./assets/edit_icon_2.svg">
+                  </button>
+                </div>
+                <div class="text-[0.7rem] text-gray-100 tracking-wider font-sans uppercase opacity-90 select-none">CLICK
+                  THE IMAGE ABOVE TO PLAY</div>
+              </div>
+            </div>
+
+            <!-- Leaderboard Published List -->
+            <div class="flex flex-col gap-1 border-t border-white/10 pt-2.5">
+              <div
+                class="flex items-center justify-between text-gray-100 font-bold tracking-[0.1em] border-b border-white/10 pb-1 mb-1 text-[0.8rem]">
+                <span>LEADER BOARD PUBLISHED</span>
+                <span>POINTS</span>
+              </div>
+              <div id="gamebox-published-players" class="flex flex-col gap-1 tracking-[0.15em]">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="self-stretch h-[20.819rem] rounded-num-19_54 [background:linear-gradient(180deg,_#d9d9d9,_#737373_58.17%)] shrink-0 flex items-start justify-center pt-[1.956rem] px-[2rem] pb-[16.793rem] box-border text-center text-[1.709rem] text-black font-inter">
+          <div class="relative shrink-0 font-bold">Game Library<br>Coming Soon</div>
+        </div>
+      </div>
+
+      <!-- BOTTOM NAVIGATION BUTTONS (Fluid Row) -->
+      <div
+        class="absolute bottom-[2rem] left-[16px] right-[16px] flex items-center justify-between gap-[0.5rem] shrink-0 select-none">
+        <div
+          class="flex-1 max-w-[65px] h-[4.875rem] relative bg-gainsboro-100/60 hover:bg-white/95 hover:scale-105 active:scale-95 transition-all duration-300 shadow-md cursor-pointer rounded-lg flex items-center justify-center font-sans text-xs font-bold text-black/70">
+          1
+        </div>
+        <div
+          class="flex-1 max-w-[65px] h-[4.875rem] relative bg-gainsboro-100/60 hover:bg-white/95 hover:scale-105 active:scale-95 transition-all duration-300 shadow-md cursor-pointer rounded-lg flex items-center justify-center font-sans text-xs font-bold text-black/70">
+          2
+        </div>
+        <div
+          class="flex-1 max-w-[65px] h-[4.875rem] relative bg-gainsboro-100/60 hover:bg-white/95 hover:scale-105 active:scale-95 transition-all duration-300 shadow-md cursor-pointer rounded-lg flex items-center justify-center font-sans text-xs font-bold text-black/70">
+          3
+        </div>
+        <div
+          class="flex-1 max-w-[65px] h-[4.875rem] relative bg-gainsboro-100/60 hover:bg-white/95 hover:scale-105 active:scale-95 transition-all duration-300 shadow-md cursor-pointer rounded-lg flex items-center justify-center font-sans text-xs font-bold text-black/70">
+          4
+        </div>
+        <div
+          class="flex-1 max-w-[65px] h-[4.875rem] relative bg-gainsboro-100/60 hover:bg-white/95 hover:scale-105 active:scale-95 transition-all duration-300 shadow-md cursor-pointer rounded-lg flex items-center justify-center font-sans text-xs font-bold text-black/70">
+          5
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. Define interactive global state object
+    const state = {
+      voting: {
+        isEditing: false,
+        selectedIndices: [],
+        title: "Enter Title for Vote",
+        events: ["Add Options"],
+        votes: [0]
+      },
+      gameBox: {
+        mode: "view", // "view" | "edit" | "published"
+        name: "GAME NAME",
+        link: "",
+        image: "./assets/cyberpunk.png",
+        players: [
+          { name: "", points: 0 },
+          { name: "", points: 0 },
+          { name: "", points: 0 }
+        ]
+      }
+    };
+
+    // 2. Voting Widget functions
+    window.editVotingWidget = function () {
+      state.voting.isEditing = true;
+      if (!state.voting.votes) state.voting.votes = state.voting.events.map(() => 0);
+      if (!state.voting.selectedIndices) state.voting.selectedIndices = [];
+      
+      const titleInput = document.getElementById('voting-title-input');
+      if (titleInput) titleInput.value = state.voting.title;
+      renderVotingWidget();
+    };
+
+    window.saveVotingWidget = function () {
+      const titleInput = document.getElementById('voting-title-input');
+      if (titleInput) {
+        state.voting.title = titleInput.value.trim() || "Constant Text Title";
+      }
+      state.voting.isEditing = false;
+      renderVotingWidget();
+    };
+
+    window.selectVotingEvent = function (index) {
+      if (!state.voting.selectedIndices) state.voting.selectedIndices = [];
+      if (!state.voting.votes) state.voting.votes = state.voting.events.map(() => 0);
+
+      const idx = state.voting.selectedIndices.indexOf(index);
+      if (idx > -1) {
+        state.voting.selectedIndices.splice(idx, 1);
+        if (state.voting.votes[index] > 0) state.voting.votes[index]--;
+      } else {
+        state.voting.selectedIndices.push(index);
+        state.voting.votes[index]++;
+      }
+      renderVotingWidget();
+    };
+
+    window.updateVotingEvent = function (index, val) {
+      state.voting.events[index] = val;
+    };
+
+    window.addVotingEvent = function () {
+      state.voting.events.push("New Event");
+      if (!state.voting.votes) state.voting.votes = [];
+      state.voting.votes.push(0);
+      renderVotingWidget();
+      // Scroll list to bottom
+      const list = document.getElementById('voting-edit-list');
+      if (list) list.scrollTop = list.scrollHeight;
+    };
+
+    window.removeVotingEvent = function (index) {
+      state.voting.events.splice(index, 1);
+      if (state.voting.votes) state.voting.votes.splice(index, 1);
+      
+      if (state.voting.selectedIndices) {
+        state.voting.selectedIndices = state.voting.selectedIndices
+          .filter(i => i !== index)
+          .map(i => i > index ? i - 1 : i);
+      }
+      renderVotingWidget();
+    };
+
+    window.renderVotingWidget = function () {
+      const viewEl = document.getElementById('voting-view');
+      const editEl = document.getElementById('voting-edit');
+      if (!viewEl || !editEl) return;
+
+      if (state.voting.isEditing) {
+        viewEl.classList.add('hidden');
+        editEl.classList.remove('hidden');
+
+        const editList = document.getElementById('voting-edit-list');
+        if (editList) {
+          editList.innerHTML = state.voting.events.map((event, index) => `
+              <div class="flex items-center justify-between w-full py-1 hover:bg-white/5 rounded px-2 -mx-2 transition-colors">
+                <div class="flex items-center gap-3.5 flex-1">
+                  <img class="w-[1.125rem] h-[1.125rem] shrink-0 select-none" src="./assets/ellipse_unchecked.svg" />
+                  <input type="text" oninput="updateVotingEvent(${index}, this.value)" value="${event}" class="flex-1 bg-transparent text-[0.875rem] text-white focus:outline-none font-yeseva-one border-b border-transparent focus:border-white/20 py-0.5" />
+                </div>
+                <button onclick="removeVotingEvent(${index})" class="text-white/60 hover:text-white cursor-pointer pl-3 pr-1 text-[1rem] flex items-center justify-center font-sans" title="Remove event">✕</button>
+              </div>
+            `).join('');
+        }
+      } else {
+        editEl.classList.add('hidden');
+        viewEl.classList.remove('hidden');
+
+        const viewTitle = document.getElementById('voting-view-title');
+        if (viewTitle) viewTitle.textContent = state.voting.title;
+
+        const viewList = document.getElementById('voting-view-list');
+        if (viewList) {
+          const isPlaceholder = state.voting.events.length === 1 && state.voting.events[0] === "Add Options";
+
+          if (isPlaceholder) {
+            viewList.innerHTML = `
+              <div onclick="editVotingWidget()" class="self-stretch flex items-center gap-3.5 cursor-pointer hover:bg-white/5 rounded px-2 -mx-2 py-1.5 transition-colors">
+                <span class="w-[1.125rem] h-[1.125rem] bg-white rounded-full shrink-0 select-none border border-[#d9d9d9]/60 shadow-[0_1px_3px_rgba(0,0,0,0.15)]"></span>
+                <div class="flex-1 relative inline-block font-yeseva-one text-[0.875rem] text-white truncate pr-2 select-none">Add Options</div>
+              </div>
+            `;
+          } else {
+            const totalVotes = (state.voting.votes || []).reduce((a, b) => a + b, 0);
+            viewList.innerHTML = state.voting.events.map((event, index) => {
+              const voteCount = (state.voting.votes && state.voting.votes[index]) || 0;
+              const percent = totalVotes > 0 ? Math.round((voteCount / totalVotes) * 100) : 0;
+              const isChecked = (state.voting.selectedIndices || []).includes(index);
+              const checkboxSrc = isChecked ? "./assets/ellipse_checked.svg" : "./assets/ellipse_unchecked.svg";
+
+              return `
+                  <div onclick="selectVotingEvent(${index})" class="self-stretch flex flex-col gap-1 cursor-pointer hover:bg-white/5 rounded-xl px-2.5 py-2 transition-colors relative isolate overflow-hidden group">
+                    <!-- Row 1: Checkbox, Text, Count -->
+                    <div class="flex items-center justify-between w-full z-10">
+                      <div class="flex items-center gap-3.5 min-w-0">
+                        <img class="w-[1.125rem] h-[1.125rem] relative shrink-0 select-none" alt="" src="${checkboxSrc}">
+                        <div class="relative inline-block font-yeseva-one text-[0.875rem] text-white truncate pr-2 select-none">${event}</div>
+                      </div>
+                      <!-- Right: Count + Mini Avatar placeholder if voted -->
+                      <div class="flex items-center gap-1.5 text-white/90 font-sans font-bold text-[0.8rem]">
+                        ${voteCount > 0 ? `<span class="size-4.5 rounded-full bg-white/20 border border-white/25 flex items-center justify-center text-[0.55rem] font-bold text-white shrink-0 select-none overflow-hidden"><svg class="size-3 fill-current" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>` : ''}
+                        <span>${voteCount}</span>
+                      </div>
+                    </div>
+                    <!-- Row 2: Premium Progress Bar (Indented to align with text) -->
+                    <div class="pl-[2.25rem] w-full z-10">
+                      <div class="h-[6px] w-full bg-white/10 rounded-full overflow-hidden mt-1 relative">
+                        <div class="h-full ${isChecked ? 'bg-white/60' : 'bg-white/20'} rounded-full transition-all duration-500 ease-out" style="width: ${percent}%"></div>
+                      </div>
+                    </div>
+                  </div>
+                `;
+            }).join('');
+          }
+        }
+      }
+    };
+
+    // 3. GameBox Widget functions
+    window.handleGameBoxImageUpload = function (input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          state.gameBox.image = e.target.result;
+          // Instantly update the edit backdrop preview image!
+          const editImg = document.getElementById('gamebox-edit-img');
+          if (editImg) editImg.src = e.target.result;
+
+          // Set the URL text field to local placeholder
+          const imgInput = document.getElementById('gamebox-image-input');
+          if (imgInput) imgInput.value = "[Uploaded Local Image]";
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    };
+
+    window.editGameBoxWidget = function () {
+      state.gameBox.mode = "edit";
+
+      // Pre-fill input values
+      const nameInput = document.getElementById('gamebox-name-input');
+      const linkInput = document.getElementById('gamebox-link-input');
+      const imgInput = document.getElementById('gamebox-image-input');
+
+      if (nameInput) nameInput.value = state.gameBox.name;
+      if (linkInput) linkInput.value = state.gameBox.link;
+      if (imgInput) {
+        if (state.gameBox.image.startsWith('data:')) {
+          imgInput.value = "[Uploaded Local Image]";
+        } else {
+          imgInput.value = state.gameBox.image !== "./assets/cyberpunk.png" ? state.gameBox.image : "";
+        }
+      }
+
+      renderGameBoxWidget();
+    };
+
+    window.saveGameBoxWidget = function () {
+      const nameInput = document.getElementById('gamebox-name-input');
+      const linkInput = document.getElementById('gamebox-link-input');
+      const imgInput = document.getElementById('gamebox-image-input');
+
+      if (nameInput) state.gameBox.name = nameInput.value.trim() || "GAME NAME";
+      if (linkInput) state.gameBox.link = linkInput.value.trim();
+
+      if (imgInput && imgInput.value.trim() && imgInput.value !== "[Uploaded Local Image]") {
+        state.gameBox.image = imgInput.value.trim();
+      }
+
+      // Check if there is data inside players to publish, otherwise fallback to view state
+      const hasPlayers = state.gameBox.players.some(p => p.name.trim() !== "");
+      state.gameBox.mode = hasPlayers ? "published" : "view";
+      renderGameBoxWidget();
+    };
+
+    window.updatePlayerName = function (index, val) {
+      state.gameBox.players[index].name = val;
+    };
+
+    window.updatePlayerPoints = function (index, val) {
+      state.gameBox.players[index].points = parseInt(val) || 0;
+    };
+
+    window.renderGameBoxWidget = function () {
+      const viewEl = document.getElementById('gamebox-view');
+      const editEl = document.getElementById('gamebox-edit');
+      const pubEl = document.getElementById('gamebox-published');
+      if (!viewEl || !editEl || !pubEl) return;
+
+      // Sync target images with centralized state
+      const viewImg = document.getElementById('gamebox-view-img');
+      const editImg = document.getElementById('gamebox-edit-img');
+      const pubImg = document.getElementById('gamebox-published-img');
+
+      if (viewImg) viewImg.src = state.gameBox.image;
+      if (editImg) editImg.src = state.gameBox.image;
+      if (pubImg) pubImg.src = state.gameBox.image;
+
+      // Hide all first
+      viewEl.classList.add('hidden');
+      editEl.classList.add('hidden');
+      pubEl.classList.add('hidden');
+
+      if (state.gameBox.mode === "edit") {
+        editEl.classList.remove('hidden');
+
+        const editPlayers = document.getElementById('gamebox-edit-players');
+        if (editPlayers) {
+          editPlayers.innerHTML = state.gameBox.players.map((player, index) => `
+              <div class="flex items-center justify-between gap-2">
+                <input type="text" oninput="updatePlayerName(${index}, this.value)" value="${player.name}" placeholder="ENTER NAME" class="flex-1 bg-black/20 border border-white/10 rounded px-2.5 py-0.5 text-[0.8rem] text-white tracking-[0.1em] uppercase focus:outline-none focus:border-white/30 font-bebas-neue" />
+                <input type="number" oninput="updatePlayerPoints(${index}, this.value)" value="${player.points}" class="w-[3.5rem] bg-black/20 border border-white/10 rounded px-2.5 py-0.5 text-[0.8rem] text-white text-right font-sans focus:outline-none focus:border-white/30" />
+              </div>
+            `).join('');
+        }
+      } else if (state.gameBox.mode === "published") {
+        pubEl.classList.remove('hidden');
+
+        const pubName = document.getElementById('gamebox-published-name');
+        if (pubName) pubName.textContent = state.gameBox.name;
+
+        const pubLink = document.getElementById('gamebox-published-link');
+        if (pubLink) pubLink.href = state.gameBox.link || "#";
+
+        const rankedPlayers = [...state.gameBox.players].sort((a, b) => b.points - a.points);
+        const pubPlayers = document.getElementById('gamebox-published-players');
+        if (pubPlayers) {
+          pubPlayers.innerHTML = rankedPlayers.map((player) => `
+              <div class="flex items-center justify-between text-white uppercase text-[0.75rem] py-0.5 border-b border-white/5 last:border-b-0">
+                <span>${player.name || 'ENTER NAME'}</span>
+                <span class="font-sans font-bold text-[0.8rem]">${player.points}</span>
+              </div>
+            `).join('');
+        }
+      } else {
+        viewEl.classList.remove('hidden');
+
+        const viewName = document.getElementById('gamebox-view-name');
+        if (viewName) viewName.textContent = state.gameBox.name;
+      }
+    };
+
+    // 4. Initial renders on DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      renderVotingWidget();
+      renderGameBoxWidget();
+    });
+  </script>
+</body>
+
+</html>
